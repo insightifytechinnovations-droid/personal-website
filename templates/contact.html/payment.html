@@ -1,0 +1,19 @@
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<button id="pay-btn" class="bg-blue-600 text-white p-3 rounded">विज्ञापन और कमीशन सक्रिय करें</button>
+
+<script>
+document.getElementById('pay-btn').onclick = function(e){
+    var options = {
+        "key": "YOUR_RAZORPAY_KEY", // यहाँ अपनी Razorpay Key डालें
+        "amount": "50000", // 500 रुपये (पैसे में)
+        "currency": "INR",
+        "name": "Insightify Tech",
+        "description": "Advertisement & Commission Processing",
+        "handler": function (response){
+            alert("पेमेंट सफल रहा! आपका विज्ञापन लाइव हो गया है।");
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+}
+</script>
