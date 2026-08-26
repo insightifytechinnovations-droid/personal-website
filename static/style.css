@@ -1,0 +1,279 @@
+/* Base Layout - क्लीन और संतुलित */
+html {
+  font-size: 100%; /* 16px base */
+}
+body {
+  background-color: #050a14;
+  color: #e2e8f0;
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.5;
+  margin: 0;
+  font-size: 1rem; /* Body text ko 16px par set karein */
+}
+
+/* हेडिंग्स */
+h1 {
+  color: #38bdf8;
+  text-align: center;
+  font-size: 2.5rem !important;
+  margin-top: 40px;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+h2 {
+  color: #38bdf8;
+  font-size: 2rem !important;
+  margin-bottom: 20px;
+}
+
+/* नेविगेशन बार - मोबाइल और डेस्कटॉप दोनों के लिए सही */
+.navbar {
+  padding: 10px 5% !important;
+  background-color: #050a14;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand {
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  color: #38bdf8 !important;
+}
+
+.nav-link {
+  font-size: 1rem !important;
+  color: #ffffff !important;
+  padding: 10px 15px !important;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #38bdf8 !important;
+}
+
+.btn-outline-primary {
+  font-size: 1rem !important;
+  padding: 8px 16px !important;
+  border: 2px solid #38bdf8;
+  color: #38bdf8 !important;
+  border-radius: 4px;
+}
+
+/* ==========================================
+    ADDED: लैंग्वेज सेलेक्टर बॉक्स (अब सबसे ऊपर और बड़ा)
+    ========================================== */
+.language-selector-wrapper, div#google_translate_element {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 9999 !important;
+    margin: 15px auto !important;
+    text-align: center !important;
+    display: block !important;
+}
+
+select.language-selector, .language-box, select#languageSelect, .goog-te-combo {
+    font-size: 1.25rem !important;    
+    padding: 14px 20px !important;  
+    height: auto !important;
+    border-radius: 12px !important;  
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border: 2px solid #38bdf8 !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    display: inline-block !important;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3) !important;
+    cursor: pointer !important;
+}
+
+/* बॉक्स के अंदर दिखने वाले सभी देशों के नामों (Options) का साइज़ बड़ा और साफ़ */
+select.language-selector option, .language-box option, select#languageSelect option, .goog-te-combo option {
+    font-size: 1.2rem !important;    
+    padding: 15px !important;
+    background: #0f172a !important;
+    color: #ffffff !important;
+}
+
+/* गूगल ट्रांसलेटर के फ्रेम और बैनर को व्यवस्थित करना ताकि लंबी लाइन न बने */
+.goog-te-banner-frame, .goog-te-gadget span {
+    display: none !important;
+}
+div.goog-te-gadget {
+    color: transparent !important;
+    font-size: 0 !important;
+}
+
+/* फॉर्म कंटेनर - सही चौड़ाई और मार्जिन के साथ */
+.form-container {
+    background: #0f172a;
+    padding: 40px !important;
+    border-radius: 20px;
+    border: 2px solid #38bdf8;
+    width: 100%;
+    max-width: 700px;
+    margin: 30px auto !important;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+    ADDED: साइड या नीचे वाले AI असिस्टेंट और फ्री ऑडिट बॉक्स को बीच वाले फॉर्म के बराबर करने के लिए
+    ========================================== */
+.ask-ai-container, .free-audit-container, 
+.sidebar-box, .ai-assistant-box, .free-audit-box {
+    background: #0f172a !important;
+    padding: 30px !important;
+    border-radius: 20px !important;
+    border: 2px solid #38bdf8 !important;
+    width: 100% !important;
+    max-width: 700px !important; /* बीच वाले फॉर्म की चौड़ाई के बिल्कुल बराबर */
+    margin: 30px auto !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2) !important;
+}
+
+/* इनपुट और टेक्सटarea - साफ़ और सही साइज़ */
+input, textarea, select { 
+    width: 100% !important;
+    padding: 16px !important; 
+    margin: 12px 0 !important;
+    font-size: 1.1rem !important; 
+    border-radius: 10px;
+    border: 2px solid #38bdf8;
+    background: #1e293b;
+    color: white;
+    box-sizing: border-box; 
+}
+
+/* बटन - बेहतरीन दिखने के लिए */
+button, .btn-primary { 
+    width: 100% !important;
+    padding: 16px !important; 
+    font-size: 1.2rem !important; 
+    background: #38bdf8 !important;
+    border: none;
+    border-radius: 10px;
+    color: #050a14 !important;
+    font-weight: bold; 
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #0ea5e9 !important;
+}
+
+/* बाकी स्टाइल */
+.glass-card h3 { font-size: 1.5rem !important; }
+.glass-card p { font-size: 1rem !important; }
+.iso-badge { font-size: 1rem !important; padding: 10px 20px !important; border-radius: 20px; border: 1px solid #38bdf8; }
+footer { font-size: 0.9rem !important; padding: 20px 0 !important; text-align: center; }
+
+/* ==========================================
+    SCAN RESULT / MODAL STYLING
+    ========================================== */
+#quote-result, .modal-dialog, .scan-popup-container {
+    max-width: 900px !important;
+    width: 100% !important;
+    margin: 30px auto !important;
+}
+
+.smart-invoice, .modal-content, .scan-result-box {
+    background: #0f172a !important;
+    border: 3px solid #38bdf8 !important;
+    border-radius: 20px !important;
+    padding: 35px !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.5) !important;
+}
+
+.smart-invoice h3, .modal-title {
+    font-size: 2.2rem !important;
+    color: #38bdf8 !important;
+    font-weight: 800 !important;
+    margin-bottom: 20px !important;
+    text-shadow: none !important;
+}
+
+.smart-invoice p, .modal-body {
+    font-size: 1.3rem !important;
+    line-height: 1.8 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+}
+
+.smart-invoice button {
+    font-size: 1.4rem !important;
+    padding: 16px !important;
+    margin-top: 20px !important;
+}
+
+#scanResultModal, #scanResultModal * {
+    text-shadow: none !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* प्रॉब्लम लिस्ट के आइटम्स की डिजाइन */
+.problem-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111827 !important;
+    border: 1px solid #38bdf8 !important;
+    padding: 16px 20px !important;
+    margin-bottom: 14px !important;
+    border-radius: 12px !important;
+}
+
+.problem-item span, .problem-item strong {
+    font-size: 1.15rem !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    font-weight: 700 !important;
+}
+
+.problem-item input[type="checkbox"] {
+    width: 22px !important;
+    height: 22px !important;
+    accent-color: #38bdf8;
+    cursor: pointer;
+    margin: 0 !important;
+}
+
+/* मोबाइल रिस्पॉन्सिवनेस के लिए मीडिया क्वेरी */
+@media screen and (max-width: 768px) {
+    .form-container, .ask-ai-container, .free-audit-container, .sidebar-box {
+        padding: 20px !important;
+        margin: 20px 10px !important;
+        width: auto !important;
+    }
+    
+    input, textarea, button, select {
+        font-size: 1rem !important;
+        padding: 14px !important;
+    }
+
+    .smart-invoice, .modal-content, .scan-result-box {
+        padding: 20px !important;
+    }
+
+    .smart-invoice h3, .modal-title {
+        font-size: 1.6rem !important;
+    }
+
+    .smart-invoice p, .modal-body {
+        font-size: 1.1rem !important;
+    }
+
+    .problem-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .problem-item span.dynamic-price {
+        align-self: flex-end;
+    }
+}
