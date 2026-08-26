@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your SEO Audit Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white p-5">
+    <div class="container glass-card">
+        <h2>Your Website Audit Report</h2>
+        <p>नीचे दी गई समस्याओं को सेलेक्ट करें और अपना पेमेंट पूरा करें:</p>
+        
+        <form id="audit-form">
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="500" id="issue1" onchange="calculateTotal()">
+                <label class="form-check-label" for="issue1">Fix Broken Links - ₹500</label>
+            </div>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="1000" id="issue2" onchange="calculateTotal()">
+                <label class="form-check-label" for="issue2">Meta Tag Optimization - ₹1000</label>
+            </div>
+            
+            <hr>
+            <h4>Total (Including 18% GST): ₹<span id="total-amount">0</span></h4>
+            <button type="button" class="btn btn-success" onclick="proceedToPayment()">Pay & Fix Now</button>
+        </form>
+    </div>
+
+    <script>
+        function calculateTotal() {
+            let total = 0;
+            if(document.getElementById('issue1').checked) total += 500;
+            if(document.getElementById('issue2').checked) total += 1000;
+            
+            let finalAmount = total + (total * 0.18); // GST Addition
+            document.getElementById('total-amount').innerText = finalAmount;
+        }
+
+        function proceedToPayment() {
+            // बेस अमाउंट कैलकुलेट करें
+            let total = 0;
+            if(document.getElementById('issue1').checked) total += 500;
+            if(document.getElementById('issue2').checked) total += 1000;
+
+            if (total === 0) {
+                alert("Please select at least one issue.");
+                return;
+            }
+
+            // Flask के /create-payment रूट को रिक्वेस्ट भेजें
+            fetch('/create-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: total,
+                    name: "Client", 
+                    email: "client@example.com",
+                    phone: "0000000000"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // पेमेंट लिंक पर रीडायरेक्ट करें
+                window.location.href = data.payment_url;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Payment link generation failed.");
+            });
+        }
+    </script>
+</body>
+</html>
