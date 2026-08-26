@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 Flask==3.0.3
 gunicorn==21.2.0
 requests==2.31.0
 python-dotenv==1.0.1
 Werkzeug==3.0.3
 razorpay
+=======
+Flask==3.0.3
+gunicorn==21.2.0
+requests==2.31.0
+python-dotenv==1.0.1
+Werkzeug==3.0.3
+razorpay
+>>>>>>> e7d22e130d6358a4a41f5e48260c9ad0975bc3f9
 openai
