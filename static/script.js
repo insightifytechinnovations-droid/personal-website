@@ -1,5 +1,5 @@
 <script>
-    // --- नए फीचर्स: देश पहचान और अलग-अलग प्राइस कैलकुलेशन के लिए ग्लोबल वेरिएबल्स ---
+    // --- देश पहचान और अलग-अलग प्राइस कैलकुलेशन के लिए ग्लोबल वेरिएबल्स ---
     let currentCurrencySymbol = '₹';
     let currencyMultiplier = 1;
 
@@ -56,8 +56,8 @@
         }
     }
 
-    // चुनी गई समस्याओं के साथ Razorpay पेमेंट ट्रिगर करने का फंक्शन (अलग-अलग प्राइस के आधार पर)
-    function paySelectedProblems() {
+    // यूनिफाइड Razorpay पेमेंट ट्रिगर फंक्शन (सभी बटनों के लिए एक समान)
+    function payWithRazorpay() {
         let totalInr = 0;
         let selectedList = [];
         document.querySelectorAll('.problem-chk:checked').forEach(chk => {
@@ -65,27 +65,27 @@
             selectedList.push(chk.getAttribute('data-name'));
         });
         
-        if(totalInr === 0) { 
-            alert("कृपया कम से कम एक समस्या (Problem) चुनें!"); 
-            return; 
-        }
+        // यदि यूजर ने कोई समस्या नहीं चुनी है, तो डिफ़ॉल्ट 999 लें, अन्यथा कुल योग लें
+        let amountVal = totalInr > 0 ? totalInr : 999;
         
-        let payableAmountInr = totalInr;
+        let nameInput = document.getElementById('name');
+        let emailInput = document.getElementById('email');
+        let phoneInput = document.getElementById('phone');
 
         let options = {
-            "key": "rzp_live_S14t63o9aY77yZ", 
-            "amount": payableAmountInr * 100, // हमेशा पैसे (Paise) में INR बेस वैल्यू जाती है
+            "key": "rzp_live_TLGQmCY5RuAV2e", // आपकी मुख्य वेरीफाइड लाइव की
+            "amount": amountVal * 100, // हमेशा पैसे (Paise) में वैल्यू जाती है
             "currency": "INR",
             "name": "Insightify Tech Innovations",
-            "description": "Selected AI Website Audit & Auto-Fix Solutions (" + selectedList.length + " items)",
+            "description": selectedList.length > 0 ? "Selected AI Solutions (" + selectedList.length + " items)" : "Global AI SEO & IT Services Consultation",
             "image": "/static/images/img1.png",
             "handler": function (response){
                 alert("भुगतान सफल रहा! Payment ID: " + response.razorpay_payment_id);
             },
             "prefill": {
-                "name": "Vikash Agrawal",
-                "email": "insightifytechinnovations@gmail.com",
-                "contact": "8077644565"
+                "name": nameInput ? (nameInput.value || "Vikash Agrawal") : "Vikash Agrawal",
+                "email": emailInput ? (emailInput.value || "insightifytechinnovations@gmail.com") : "insightifytechinnovations@gmail.com",
+                "contact": phoneInput ? (phoneInput.value || "8077644565") : "8077644565"
             },
             "theme": {
                 "color": "#38bdf8"
@@ -100,7 +100,10 @@
         }
     }
 
-    // --- आपकी पुरानी सभी कोडिंग (बिना किसी बदलाव के सुरक्षित) ---
+    // बैकवर्ड कम्पैटिबिलिटी के लिए alias (ताकि पुराना नाम भी काम करता रहे)
+    function paySelectedProblems() {
+        payWithRazorpay();
+    }
 
     // Existing sendMessage function support for chat input enter key or button click
     function sendMessage() {
@@ -111,7 +114,6 @@
         
         let messageText = userInput.value.trim();
         
-        // Append user message to chat box
         chatBox.innerHTML += `<div class="mb-3 text-end">
             <div class="user-message-bubble d-inline-block bg-info text-dark p-2 rounded" style="max-width: 92%;">
                 ${messageText}
@@ -121,12 +123,9 @@
         userInput.value = '';
         chatBox.scrollTop = chatBox.scrollHeight;
         
-        // Send POST request to backend Flask /chat endpoint
         fetch('/chat', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: messageText })
         })
         .then(response => response.json())
@@ -172,13 +171,10 @@
         if (resNameEl) resNameEl.innerText = name || 'Valued Client';
         if (resUrlEl) resUrlEl.innerText = url || 'https://...';
         
-        // Submit via fetch to FormSubmit endpoint without navigating away
         fetch(form.action, {
             method: 'POST',
             body: formData,
-            headers: {
-                'Accept': 'application/json'
-            }
+            headers: { 'Accept': 'application/json' }
         }).then(response => {
             let scanModalElement = document.getElementById('seo-form') && document.getElementById('scanResultModal');
             if (scanModalElement && typeof bootstrap !== 'undefined') {
@@ -197,52 +193,14 @@
         });
     }
 
-    function payWithRazorpay() {
-        let totalInr = 0;
-        let selectedList = [];
-        document.querySelectorAll('.problem-chk:checked').forEach(chk => {
-            totalInr += parseInt(chk.getAttribute('data-price')) || 0;
-            selectedList.push(chk.getAttribute('data-name'));
-        });
-        
-        // यदि यूजर ने कोई समस्या नहीं चुनी है, तो डिफ़ॉल्ट 999 ले, अन्यथा कुल योग लें
-        let amountVal = totalInr > 0 ? totalInr : 999;
-        
-        let nameInput = document.getElementById('name');
-        let emailInput = document.getElementById('email');
-        let phoneInput = document.getElementById('phone');
-
-        let options = {
-            "key": "rzp_live_TLGQmCY5RuAV2e", 
-            "amount": amountVal * 100, // Amount in paise
-            "currency": "INR",
-            "name": "Insightify Tech Innovations",
-            "description": selectedList.length > 0 ? "Selected AI Solutions (" + selectedList.length + " items)" : "Global AI SEO & IT Services Consultation",
-            "image": "/static/images/img1.png",
-            "handler": function (response){
-                alert("भुगतान सफल रहा! Payment ID: " + response.razorpay_payment_id);
-            },
-            "prefill": {
-                "name": nameInput ? (nameInput.value || "Vikash Agrawal") : "Vikash Agrawal",
-                "email": emailInput ? (emailInput.value || "insightifytechinnovations@gmail.com") : "insightifytechinnovations@gmail.com",
-                "contact": phoneInput ? (phoneInput.value || "8077644565") : "8077644565"
-            },
-            "theme": {
-                "color": "#38bdf8"
-            }
-        };
-        
-        if (typeof Razorpay !== 'undefined') {
-            let rzp1 = new Razorpay(options);
-            rzp1.open();
-        } else {
-            alert("Razorpay SDK loaded incorrectly or missing.");
-        }
-    }
-
     // पेज लोड होते ही देश पहचान कर करेंसी सेट करने का ऑटो-ट्रिगर
     window.addEventListener('DOMContentLoaded', () => {
         detectCountryAndSetCurrency();
+        
+        // चेकबॉक्स बदलने पर टोटल अमाउंट ऑटोमैटिक कैलकुलेट हो
+        document.querySelectorAll('.problem-chk').forEach(chk => {
+            chk.addEventListener('change', calculateTotal);
+        });
     });
 </script>
 </body>
