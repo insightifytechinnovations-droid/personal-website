@@ -8,3 +8,4 @@ openai
 brevo-python
 apscheduler
 sib-api-v3-sdk
+google-generativeai
