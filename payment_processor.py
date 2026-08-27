@@ -1,7 +1,7 @@
 import razorpay
 
 # Apni Razorpay Key aur Secret yahan daalein
-client = razorpay.Client(auth=("rzp_test_T6DoFTJE5c9RgO", "345x3JjgH90YRPXWM4mzyGVF"))
+client = razorpay.Client(auth=("rzp_live_TUiu15xHh1ZWpr", "0CZVyPk7zp1odbOruc9WzzB7"))
 
 def create_payment_link(amount, client_name, client_email, client_phone):
     """
