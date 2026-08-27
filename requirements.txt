@@ -6,3 +6,5 @@ Werkzeug==3.0.3
 razorpay
 openai
 brevo-python
+apscheduler
+sib-api-v3-sdk
