@@ -5,6 +5,8 @@ from chatbot_engine import insightify_ai_bot
 from payment_processor import create_payment_link
 import os
 import openai
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 app = Flask(__name__)
@@ -125,6 +127,71 @@ def process_autofix():
     return jsonify({
         'status': 'success',
         'message': 'Payment verified, AI auto-fix completed, and proof reports dispatched successfully to client and admin.'
+    })
+
+# --- नया बल्क कैंपेन राउट (हजारों लोगों तक रिक्वायरमेंट/ऐड भेजने के लिए) ---
+def send_bulk_outreach_email(to_email, client_name, requirement_subject, requirement_message):
+    configuration = sib_api_v3_sdk.Configuration()
+    configuration.api_key['api-key'] = os.environ.get("BREVO_API_KEY", "YOUR_BREVO_API_KEY")
+    
+    api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+    
+    sender = {"name": "Insightify Tech Innovations", "email": "insightifytechinnovations@gmail.com"}
+    to = [{"email": to_email, "name": client_name}]
+    
+    html_content = f"""
+    <html>
+      <body>
+        <p>Dear {client_name},</p>
+        <p>{requirement_message}</p>
+        <br>
+        <p><b>Insightify Tech Innovations Private Limited</b></p>
+        <p>Web & Software Development, SEO & AI Automation Services</p>
+        <p>Helpline: +91 8077644565 | GSTIN: 09AACHI6384B1ZG</p>
+      </body>
+    </html>
+    """
+    
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
+        to=to,
+        sender=sender,
+        subject=requirement_subject,
+        html_content=html_content
+    )
+    
+    try:
+        api_instance.send_transac_email(send_smtp_email)
+        return True
+    except ApiException as e:
+        print(f"Error sending bulk email to {to_email}: {e}")
+        return False
+
+@app.route('/send-bulk-campaign', methods=['POST'])
+def send_bulk_campaign():
+    data = request.json
+    recipients_list = data.get('recipients', []) # [{'email': '...', 'name': '...'}, ...]
+    subject = data.get('subject', 'Special IT & SEO Services Offer - Insightify Tech Innovations')
+    message = data.get('message', 'We are offering automated website error fixing and AI audit services...')
+    
+    success_count = 0
+    failed_count = 0
+    
+    for recipient in recipients_list:
+        email = recipient.get('email')
+        name = recipient.get('name', 'Valued Business Owner')
+        
+        if email:
+            sent_status = send_bulk_outreach_email(email, name, subject, message)
+            if sent_status:
+                success_count += 1
+            else:
+                failed_count += 1
+                
+    return jsonify({
+        'status': 'completed',
+        'total_sent': success_count,
+        'total_failed': failed_count,
+        'message': f"Bulk campaign executed successfully. Sent: {success_count}, Failed: {failed_count}"
     })
 
 if __name__ == '__main__':
