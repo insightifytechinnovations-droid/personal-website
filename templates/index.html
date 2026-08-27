@@ -673,6 +673,16 @@
         btn.innerHTML = chatContainer.classList.contains('expanded') ? `<i class="bi bi-arrows-angle-contract"></i> छोटा करें` : `<i class="bi bi-arrows-angle-expand"></i> बड़ा करें`;
     }
 
+   const chatContainer = document.getElementById('chatContainer');
+    const userInput = document.getElementById('user-input');
+
+    function toggleExpand(e) {
+        e.stopPropagation();
+        chatContainer.classList.toggle('expanded');
+        let btn = document.getElementById('expandBtn');
+        btn.innerHTML = chatContainer.classList.contains('expanded') ? `<i class="bi bi-arrows-angle-contract"></i> छोटा करें` : `<i class="bi bi-arrows-angle-expand"></i> बड़ा करें`;
+    }
+
     userInput.addEventListener('focus', function() {
         chatContainer.classList.add('expanded');
         document.getElementById('expandBtn').innerHTML = `<i class="bi bi-arrows-angle-contract"></i> छोटा करें`;
@@ -730,7 +740,7 @@
         if(totalInr === 0) { alert("कृपया कम से कम एक समस्या (Problem) चुनें!"); return; }
         
         var options = {
-            "key": "rzp_live_YOUR_MERCHANT_KEY_HERE",
+            "key": "rzp_live_TUiu15xHh1ZWpr",
             "amount": totalInr * 100, 
             "currency": "INR",
             "name": "Insightify Tech Innovations",
