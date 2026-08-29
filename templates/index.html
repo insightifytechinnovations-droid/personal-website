@@ -663,32 +663,32 @@
     const userInput = document.getElementById('user-input');
 
     function toggleExpand(e) {
-        e.stopPropagation();
+        if (e) e.stopPropagation();
+        if (!chatContainer) return;
         chatContainer.classList.toggle('expanded');
         let btn = document.getElementById('expandBtn');
-        btn.innerHTML = chatContainer.classList.contains('expanded') ? `<i class="bi bi-arrows-angle-contract"></i> छोटा करें` : `<i class="bi bi-arrows-angle-expand"></i> बड़ा करें`;
+        if (btn) {
+            btn.innerHTML = chatContainer.classList.contains('expanded') ? `<i class="bi bi-arrows-angle-contract"></i> छोटा करें` : `<i class="bi bi-arrows-angle-expand"></i> बड़ा करें`;
+        }
     }
 
-   const chatContainer = document.getElementById('chatContainer');
-    const userInput = document.getElementById('user-input');
-
-    function toggleExpand(e) {
-        e.stopPropagation();
-        chatContainer.classList.toggle('expanded');
-        let btn = document.getElementById('expandBtn');
-        btn.innerHTML = chatContainer.classList.contains('expanded') ? `<i class="bi bi-arrows-angle-contract"></i> छोटा करें` : `<i class="bi bi-arrows-angle-expand"></i> बड़ा करें`;
+    if (userInput) {
+        userInput.addEventListener('focus', function() {
+            if (chatContainer) chatContainer.classList.add('expanded');
+            let expandBtn = document.getElementById('expandBtn');
+            if (expandBtn) {
+                expandBtn.innerHTML = `<i class="bi bi-arrows-angle-contract"></i> छोटा करें`;
+            }
+        });
     }
-
-    userInput.addEventListener('focus', function() {
-        chatContainer.classList.add('expanded');
-        document.getElementById('expandBtn').innerHTML = `<i class="bi bi-arrows-angle-contract"></i> छोटा करें`;
-    });
 
     function sendMessage() {
         let input = document.getElementById('user-input');
         let chatBox = document.getElementById('chat-box');
+        if (!input || !chatBox) return;
+
         let messageText = input.value.trim();
-        if(!messageText) return;
+        if (!messageText) return;
 
         chatBox.innerHTML += `<div class="mb-3 text-end"><div class="user-message-bubble d-inline-block text-start"><b>You:</b> ${messageText}</div></div>`;
         input.value = '';
@@ -715,14 +715,26 @@
         document.querySelectorAll('.problem-chk:checked').forEach(chk => {
             totalInr += parseInt(chk.getAttribute('data-price')) || 0;
         });
-        document.getElementById('totalAmountText').innerText = '₹' + totalInr.toLocaleString('en-IN');
+        let totalElement = document.getElementById('totalAmountText');
+        if (totalElement) {
+            totalElement.innerText = '₹' + totalInr.toLocaleString('en-IN');
+        }
     }
 
     function handleScanSubmit(event) {
         event.preventDefault(); 
-        document.getElementById('resName').innerText = document.getElementById('name').value || "Valued User";
-        document.getElementById('resUrl').innerText = document.getElementById('website').value || "https://...";
-        new bootstrap.Modal(document.getElementById('scanResultModal')).show();
+        let nameElem = document.getElementById('name');
+        let webElem = document.getElementById('website');
+        let resName = document.getElementById('resName');
+        let resUrl = document.getElementById('resUrl');
+
+        if (resName) resName.innerText = nameElem ? nameElem.value || "Valued User" : "Valued User";
+        if (resUrl) resUrl.innerText = webElem ? webElem.value || "https://..." : "https://...";
+        
+        let modalEl = document.getElementById('scanResultModal');
+        if (modalEl && typeof bootstrap !== 'undefined') {
+            new bootstrap.Modal(modalEl).show();
+        }
     }
 
     function paySelectedProblems() {
@@ -733,8 +745,15 @@
             selectedList.push(chk.getAttribute('data-name'));
         });
         
-        if(totalInr === 0) { alert("कृपया कम से कम एक समस्या (Problem) चुनें!"); return; }
+        if (totalInr === 0) { 
+            alert("कृपया कम से कम एक समस्या (Problem) चुनें!"); 
+            return; 
+        }
         
+        let nameElem = document.getElementById('name');
+        let emailElem = document.getElementById('email');
+        let phoneElem = document.getElementById('phone');
+
         var options = {
             "key": "rzp_live_TUiu15xHh1ZWpr",
             "amount": totalInr * 100, 
@@ -745,9 +764,9 @@
                 alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
             },
             "prefill": {
-                "name": document.getElementById('name').value || "Valued Client",
-                "email": document.getElementById('email').value || "insightifytechinnovations@gmail.com",
-                "contact": document.getElementById('phone').value || "8077644565"
+                "name": nameElem ? nameElem.value : "Valued Client",
+                "email": emailElem ? emailElem.value : "insightifytechinnovations@gmail.com",
+                "contact": phoneElem ? phoneElem.value : "8077644565"
             },
             "theme": { "color": "#38bdf8" }
         };
@@ -755,7 +774,13 @@
     }
 
     function payWithRazorpay() {
-        let amountVal = document.getElementById('payAmount').value || 999;
+        let payAmountElem = document.getElementById('payAmount');
+        let amountVal = payAmountElem ? payAmountElem.value || 999 : 999;
+        
+        let nameElem = document.getElementById('name');
+        let emailElem = document.getElementById('email');
+        let phoneElem = document.getElementById('phone');
+
         var options = {
             "key": "rzp_live_TUiu15xHh1ZWpr",
             "amount": amountVal * 100, 
@@ -766,9 +791,9 @@
                 alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
             },
             "prefill": {
-                "name": document.getElementById('name').value || "Valued Client",
-                "email": document.getElementById('email').value || "insightifytechinnovations@gmail.com",
-                "contact": document.getElementById('phone').value || "8077644565"
+                "name": nameElem ? nameElem.value : "Valued Client",
+                "email": emailElem ? emailElem.value : "insightifytechinnovations@gmail.com",
+                "contact": phoneElem ? phoneElem.value : "8077644565"
             },
             "theme": { "color": "#38bdf8" }
         };
