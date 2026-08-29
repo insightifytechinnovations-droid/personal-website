@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insightify Tech Innovations | Global AI SEO Solutions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body { background-color: #3c5ca7; color: #f1f5f9; font-family: 'Segoe UI', sans-serif; }
+        
+        .navbar-brand { 
+            font-size: 2.2rem !important; 
+            font-weight: 800 !important; 
+            letter-spacing: 0.5px;
+            background: linear-gradient(45deg, #ffffff, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-btn-custom { 
+            color: #ffffff !important; 
+            font-size: 1.5rem !important; 
+            margin-left: 15px; 
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-weight: 700 !important; 
+            background: linear-gradient(45deg, #1e293b, #0f172a) !important;
+            border: 3px solid #38bdf8 !important;
+            border-radius: 12px !important;
+            padding: 12px 26px !important;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .nav-btn-custom:hover { 
+            color: #0f172a !important; 
+            background: #38bdf8 !important;
+            border-color: #ffffff !important;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .iso-badge-custom {
+            font-size: 2.2rem !important;
+            padding: 18px 35px !important;
+            font-weight: 900 !important;
+            background: linear-gradient(45deg, #1e293b, #0f172a) !important;
+            color: #38bdf8 !important;
+            border: 4px solid #38bdf8 !important;
+            border-radius: 60px !important;
+            display: inline-block;
+            margin-bottom: 25px;
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .iso-badge-custom i {
+            font-size: 2.4rem !important;
+            color: #22c55e !important;
+            margin-right: 10px;
+        }
+
+        .company-full-title {
+            font-size: 3rem !important;
+            font-weight: 900 !important;
+            color: #ffffff !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+        }
+
+        .hero-subtitle-large {
+            font-size: 2.2rem !important;
+            font-weight: 800 !important;
+            background: linear-gradient(45deg, #ffffff, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Language Container Styling */
+        .lang-container {
+            position: fixed;
+            top: 50%;
+            right: 25px;
+            transform: translateY(-50%);
+            z-index: 9998;
+            background: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 16px;
+            padding: 22px 25px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            min-width: 260px;
+        }
+        .lang-title {
+            color: #38bdf8;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .goog-te-combo {
+            width: 100% !important;
+            padding: 14px 18px !important;
+            font-size: 1.5rem !important;
+            background: #0f172a !important;
+            color: #ffffff !important;
+            border: 3px solid #38bdf8 !important;
+            border-radius: 12px !important;
+            outline: none !important;
+            font-weight: bold !important;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+        .goog-te-combo option {
+            font-size: 1.4rem !important;
+            background: #0f172a !important;
+            color: #ffffff !important;
+            padding: 12px !important;
+        }
+
+        .goog-te-banner-frame { display: none !important; }
+        body { top: 0 !important; }
+
+        .glass-card { 
+            background: rgba(30, 41, 59, 0.85); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255,255,255,0.15); 
+            border-radius: 20px; 
+            padding: 40px !important; 
+        }
+
+        .glass-card .form-control {
+            font-size: 1.4rem !important;
+            padding: 14px 20px !important;
+            height: auto !important;
+            min-height: 58px !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-color: #38bdf8 !important;
+            border-width: 3px !important;
+            font-weight: bold !important;
+        }
+
+        .glass-card .form-control::placeholder {
+            color: #222222 !important;
+            opacity: 1 !important;
+            font-size: 1.35rem !important;
+            font-weight: 800 !important;
+        }
+
+        .glass-card textarea.form-control {
+            height: 110px !important;
+        }
+
+        .input-group {
+            margin-bottom: 25px !important;
+        }
+
+        .input-group-text {
+            background-color: #1e293b !important;
+            color: #38bdf8 !important;
+            border-color: #38bdf8 !important;
+            border-width: 3px !important;
+            font-size: 1.8rem !important;
+            padding: 0 22px !important;
+        }
+
+        .btn-primary {
+            font-size: 1.8rem !important;
+            padding: 18px 28px !important;
+            font-weight: 900 !important;
+            background: linear-gradient(45deg, #0284c7, #38bdf8) !important;
+            border: 3px solid #ffffff !important;
+            border-radius: 12px !important;
+            color: #0f172a !important;
+            box-shadow: 0 6px 25px rgba(56, 189, 248, 0.6);
+            transition: all 0.3s ease-in-out !important;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.03);
+            background: #38bdf8 !important;
+            color: #000000 !important;
+        }
+
+        .secure-badge { 
+            color: #22c55e !important; 
+            font-size: 1.6rem !important; 
+            margin-top: 18px !important; 
+            font-weight: 900 !important;
+        }
+
+        .payment-box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 2px dashed #38bdf8;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .btn-pay {
+            font-size: 1.5rem !important;
+            font-weight: 800 !important;
+            background: linear-gradient(45deg, #22c55e, #16a34a) !important;
+            color: #ffffff !important;
+            border: 2px solid #ffffff !important;
+            border-radius: 12px !important;
+            padding: 14px 25px !important;
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+        }
+        .btn-pay:hover {
+            background: #16a34a !important;
+            transform: scale(1.05);
+        }
+
+        /* Smart Chat Container */
+        .smart-chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 520px;
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.98);
+            border: 3px solid #38bdf8;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(56, 189, 248, 0.5);
+            overflow: hidden;
+        }
+
+        .smart-chat-container.expanded { width: 680px; }
+
+        .smart-chat-header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-bottom: 2px solid #38bdf8;
+            padding: 14px 20px;
+        }
+
+        .ai-avatar-box {
+            position: relative;
+            background: rgba(56, 189, 248, 0.15);
+            border: 2px solid #38bdf8;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: #38bdf8;
+            margin-right: 14px;
+        }
+
+        .online-dot {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background-color: #22c55e;
+            border: 2px solid #0f172a;
+            border-radius: 50%;
+        }
+
+        .smart-chat-body {
+            height: 240px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #080c14;
+            font-size: 1.15rem;
+        }
+
+        .smart-chat-container.expanded .smart-chat-body { height: 480px; font-size: 1.25rem; }
+
+        .ai-message-bubble {
+            background: linear-gradient(135deg, #1e293b, #111827);
+            border: 2px solid #38bdf8;
+            border-radius: 14px;
+            padding: 14px 18px;
+            color: #ffffff;
+        }
+
+        .user-message-bubble {
+            background: #38bdf8;
+            color: #0f172a;
+            font-weight: bold;
+            border-radius: 14px;
+            padding: 14px 18px;
+        }
+
+        .smart-chat-footer {
+            background: #1e293b;
+            border-top: 2px solid #38bdf8;
+            padding: 14px;
+        }
+
+        .chat-input-box {
+            font-size: 1.2rem !important;
+            min-height: 52px !important;
+            height: 52px !important;
+            padding: 10px 16px !important;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #38bdf8 !important;
+            border-radius: 10px !important;
+            font-weight: bold !important;
+        }
+
+        .chat-send-btn {
+            font-size: 1.2rem !important;
+            padding: 10px 22px !important;
+            border-radius: 10px !important;
+            font-weight: bold !important;
+        }
+
+        /* Footer */
+        .footer { 
+            background: linear-gradient(135deg, #020617, #0f172a); 
+            padding: 50px 0; 
+            border-top: 3px solid #38bdf8; 
+            margin-top: 60px; 
+        }
+        .footer h5 {
+            font-size: 2.2rem !important;
+            font-weight: 900 !important;
+            color: #ffffff !important;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .footer p {
+            font-size: 1.5rem !important;
+            font-weight: 700 !important;
+            color: #cbd5e1 !important;
+        }
+        .footer p strong { color: #38bdf8 !important; }
+        .footer-copyright {
+            font-size: 1.3rem !important;
+            color: #38bdf8 !important;
+            font-weight: 800 !important;
+            margin-top: 25px;
+        }
+
+        .carousel-item img { height: 350px; object-fit: cover; border-radius: 15px; }
+        
+        /* ================= हाई-कंट्रास्ट और बड़े फॉन्ट वाले समस्या बॉक्स ================= */
+        .problem-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff !important; /* साफ़ सफ़ेद बैकग्राउंड ताकि टेक्स्ट एक बार में चमक उठे */
+            border: 3px solid #0284c7 !important;
+            padding: 22px 25px !important;
+            margin-bottom: 18px !important;
+            border-radius: 16px !important;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transition: all 0.2s ease-in-out;
+        }
+        .problem-item:hover {
+            border-color: #22c55e !important;
+            transform: scale(1.01);
+        }
+        .problem-item span.problem-text {
+            font-size: 1.5rem !important;
+            color: #0f172a !important; /* गहरा डार्क कलर ताकि एकदम साफ़ पढ़े जा सके */
+            font-weight: 800 !important;
+        }
+        .problem-item input[type="checkbox"] {
+            width: 32px !important;
+            height: 32px !important;
+            accent-color: #0284c7;
+            cursor: pointer;
+        }
+        .problem-item span.problem-price {
+            font-size: 1.8rem !important;
+            color: #0369a1 !important;
+            font-weight: 900 !important;
+            background: #e0f2fe;
+            padding: 6px 16px;
+            border-radius: 10px;
+            border: 2px solid #bae6fd;
+        }
+        /* ========================================================================= */
+        
+        @media (max-width: 768px) {
+            .company-full-title { font-size: 1.8rem !important; }
+            .hero-subtitle-large { font-size: 1.4rem !important; }
+            .carousel-item img { height: 200px; }
+            .glass-card { padding: 20px; }
+            .lang-container { right: 10px; padding: 12px 15px; min-width: 150px; }
+            .smart-chat-container, .smart-chat-container.expanded { width: 94%; right: 3%; bottom: 10px; }
+            .problem-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .problem-item span.problem-text { font-size: 1.3rem !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="lang-container">
+    <div class="lang-title"><i class="bi bi-translate"></i> Select Language</div>
+    <div id="google_translate_element"></div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-4 py-3">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">Insightify <span class="text-primary">Tech</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ms-auto align-items-lg-center">
+                <button class="nav-btn-custom" data-bs-toggle="modal" data-bs-target="#companyModal">
+                    <i class="bi bi-house-door-fill me-1"></i> Home
+                </button>
+                <button class="nav-btn-custom" data-bs-toggle="modal" data-bs-target="#servicesModal">
+                    <i class="bi bi-gear-fill me-1"></i> Services
+                </button>
+                <button class="nav-btn-custom" data-bs-toggle="modal" data-bs-target="#companyModal">
+                    <i class="bi bi-info-circle-fill me-1"></i> About Insightify
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid py-4 text-center">
+    <div class="iso-badge-custom mb-3">
+        <i class="bi bi-patch-check-fill"></i> ISO Certified Institution
+    </div>
+    <h1 class="company-full-title">Insightify Tech Innovations Private Limited</h1>
+    <p class="hero-subtitle-large">Global AI-Driven Digital Solutions | Hathras to World</p>
+</div>
+
+<div class="container-fluid mb-5 px-4">
+    <div id="companyCarousel" class="carousel slide shadow-lg" data-bs-ride="carousel">
+        <div class="carousel-inner rounded-3">
+            <div class="carousel-item active"><img src="/static/images/img1.png" class="d-block w-100" alt="Project 1"></div>
+            <div class="carousel-item"><img src="/static/images/img2.png" class="d-block w-100" alt="Project 2"></div>
+            <div class="carousel-item"><img src="/static/images/img3.png" class="d-block w-100" alt="Project 3"></div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#companyCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+        <button class="carousel-control-next" type="button" data-bs-target="#companyCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+    </div>
+</div>
+
+<div class="container-fluid px-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 glass-card mb-5">
+            <h3 class="text-center mb-4 text-white fs-1 fw-bold">Get Your SEO & Audit</h3>
+            
+          <form id="seo-form" action="/send-seo-audit" method="POST" onsubmit="handleScanSubmit(event)">
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-person"></i></span>
+        <input type="text" name="Name" id="name" class="form-control" placeholder="Enter Your Full Name (पूरा नाम दर्ज करें)" required>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+        <input type="email" name="email" id="email" class="form-control" placeholder="Enter Your Email Address (ईमेल आईडी)" required>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
+        <input type="tel" name="Phone" id="phone" class="form-control" placeholder="Enter WhatsApp Number (व्हाट्सएप नंबर)" required>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-globe"></i></span>
+        <input type="text" name="Website_URL" id="website" class="form-control" placeholder="Enter Website URL (वेबसाइट लिंक https://...)" required>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-chat-text"></i></span>
+        <textarea name="Requirements" id="requirements" class="form-control" placeholder="Enter Requirements / Address details" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 mb-3"><i class="bi bi-search me-2"></i> Scan Website Problems</button>
+    <div class="text-center secure-badge"><i class="bi bi-shield-lock-fill me-2"></i> 100% Secure AI Audit Active</div>
+</form>
+            
+            <div class="payment-box">
+                <h4 class="text-info fw-bold mb-3" style="font-size: 1.8rem;">Pay Online Securely via Razorpay</h4>
+                <p class="text-white mb-4" style="font-size: 1.3rem;">Instant Service Booking & Consultation Fee</p>
+                <div class="mb-3">
+                    <input type="number" id="payAmount" class="form-control w-50 mx-auto text-center fw-bold fs-3" value="999" min="1">
+                </div>
+                <button type="button" class="btn btn-pay" onclick="payWithRazorpay()">
+                    <i class="bi bi-credit-card-2-front-fill me-2"></i> Pay Now with Razorpay
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= नया हाई-विजिबिलिटी स्कैन रिजल्ट पॉपअप ================= -->
+<div class="modal fade" id="scanResultModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content text-dark shadow-lg" style="border: 4px solid #38bdf8 !important; border-radius: 24px !important; padding: 35px !important; background-color: #0b0f19 !important;">
+            <div class="modal-header border-bottom border-info pb-4">
+                <h5 class="modal-title text-info fw-bold" style="font-size: 2.2rem !important;"><i class="bi bi-cpu-fill me-3"></i> AI Website Scan & Problem Solutions Selector</h5>
+                <button type="button" class="btn-close btn-close-white fs-4" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4" style="font-size: 1.3rem !important; line-height: 1.8 !important;">
+                <div class="alert alert-success bg-success bg-opacity-25 text-success border border-success fw-bold mb-4 p-3 rounded-3" style="font-size: 1.3rem;">
+                    <i class="bi bi-check-circle-fill me-2"></i> स्कैन सफल! नीचे अपनी जरूरत की समस्याएं चुनें और तुरंत ऑटो-फिक्स कराएं।
+                </div>
+                <div class="row mb-3 fs-4 text-white">
+                    <div class="col-md-6"><strong>Client Name:</strong> <span id="resName" class="text-warning fw-bold">--</span></div>
+                    <div class="col-md-6"><strong>Scanned URL:</strong> <span id="resUrl" class="text-info fw-bold">--</span></div>
+                </div>
+                <hr class="border-info my-3">
+                <p class="text-white fw-bold mb-3" style="font-size: 1.5rem;">🛠️ Select Specific Problems to Fix:</p>
+                
+                <div id="problemsList" style="max-height: 420px; overflow-y: auto; padding-right: 10px;">
+                    <div class="problem-item">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="problem-chk" data-price="499" data-name="SEO Performance & Global Meta Indexing" onchange="calculateTotal()">
+                            <span class="ms-3 problem-text">⚠️ SEO Performance & Global Meta Indexing</span>
+                        </div>
+                        <span class="problem-price">₹499</span>
+                    </div>
+
+                    <div class="problem-item">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="problem-chk" data-price="899" data-name="Speed Index Cache & Heavy Image Compression" onchange="calculateTotal()">
+                            <span class="ms-3 problem-text">⚡ Speed Index Cache & Image Compression</span>
+                        </div>
+                        <span class="problem-price">₹899</span>
+                    </div>
+
+                    <div class="problem-item">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="problem-chk" data-price="399" data-name="SSL Security Certificate & Encryption Upgrade" onchange="calculateTotal()">
+                            <span class="ms-3 problem-text">🔒 SSL Security Certificate & Encryption Upgrade</span>
+                        </div>
+                        <span class="problem-price">₹399</span>
+                    </div>
+
+                    <div class="problem-item">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="problem-chk" data-price="1299" data-name="Database SQL Injection & Vulnerability Patching" onchange="calculateTotal()">
+                            <span class="ms-3 problem-text">🛡️ Database SQL Injection & Vulnerability Patching</span>
+                        </div>
+                        <span class="problem-price">₹1299</span>
+                    </div>
+
+                    <div class="problem-item">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="problem-chk" data-price="699" data-name="Mobile Responsiveness & UI Layout Alignment" onchange="calculateTotal()">
+                            <span class="ms-3 problem-text">📱 Mobile Responsiveness & UI Layout Alignment</span>
+                        </div>
+                        <span class="problem-price">₹699</span>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-secondary bg-opacity-25 rounded-3 border border-info mt-4 text-center">
+                    <h4 class="text-white fw-bold mb-3 fs-2">Total Selected Solutions Price: <span id="totalAmountText" class="text-warning">₹0</span></h4>
+                    <button type="button" class="btn btn-success btn-lg w-100 py-3 fw-bold fs-3 shadow" onclick="paySelectedProblems()">
+                        <i class="bi bi-credit-card-2-front-fill me-2"></i> Pay Now & Start Auto-Fix AI
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+
+<div class="smart-chat-container" id="chatContainer">
+    <div class="smart-chat-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <div class="ai-avatar-box">
+                <i class="bi bi-robot"></i>
+                <div class="online-dot"></div>
+            </div>
+            <div>
+                <h5 class="text-info fw-bold mb-0" style="font-size: 1.15rem;">Insightify AI Assistant</h5>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success px-2 py-0" style="font-size: 0.75rem;"><i class="bi bi-circle-fill"></i> Active</span>
+            </div>
+        </div>
+        <button class="btn btn-sm btn-outline-info text-white fw-bold px-3 py-1" onclick="toggleExpand(event)" id="expandBtn">
+            <i class="bi bi-arrows-angle-expand"></i> बड़ा करें
+        </button>
+    </div>
+    <div class="smart-chat-body" id="chat-box">
+        <div class="mb-3">
+            <div class="ai-message-bubble d-inline-block">
+                <strong class="text-info">Insightify AI Expert</strong><br>
+                नमस्ते! <b>Insightify Tech Innovations Private Limited</b> में आपका स्वागत है। आप क्या जानना चाहते हैं?
+            </div>
+        </div>
+    </div>
+    <div class="smart-chat-footer">
+        <div class="input-group mb-0">
+            <input type="text" id="user-input" class="form-control chat-input-box" placeholder="यहाँ सवाल पूछें...">
+            <button class="btn btn-primary chat-send-btn shadow" type="button" onclick="sendMessage()"><i class="bi bi-send-fill"></i> भेजें</button>
+        </div>
+    </div>
+</div>
+
+<footer class="footer text-center">
+    <div class="container-fluid">
+        <h5>Insightify Tech Innovations Private Limited</h5>
+        <p><i class="bi bi-geo-alt-fill text-info"></i> <strong>Head Office:</strong> Hathras, UP | <i class="bi bi-receipt text-info"></i> <strong>GSTIN:</strong> 09AACHI6384B1ZG</p>
+        <p><i class="bi bi-telephone-fill text-info"></i> <strong>Helpline:</strong> +91 8077644565 | <i class="bi bi-envelope-fill text-info"></i> <strong>Email:</strong> insightifytechinnovations@gmail.com</p>
+        <div class="footer-copyright">
+            © 2026 Insightify Tech Innovations Pvt. Ltd. | All Rights Reserved | ISO Certified
+        </div>
+    </div>
+</footer>
+
+<!-- Company & Services Modals -->
+<div class="modal fade" id="companyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white border border-info p-3">
+            <div class="modal-header border-bottom border-info">
+                <h5 class="modal-title text-info fs-3 fw-bold">Insightify Tech Innovations Private Limited</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body fs-5">
+                <p><strong>Location:</strong> Hathras, Uttar Pradesh, India</p>
+                <p><strong>Bank:</strong> Canara Bank, Hathras | <strong>Account:</strong> 120030532448 | <strong>IFSC:</strong> CNRB0004944</p>
+                <p><strong>GST Number:</strong> 09AACHI6384B1ZG</p>
+                <p><strong>Support Contact:</strong> 8077644565</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="servicesModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white border border-info p-3">
+            <div class="modal-header border-bottom border-info">
+                <h5 class="modal-title text-info fs-3 fw-bold"><i class="bi bi-gear-fill me-2"></i> Insightify Tech Services</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body fs-5">
+                <ul>
+                    <li>Global AI-Driven SEO Solutions & Automation</li>
+                    <li>Advanced Website Development & AI Chatbots</li>
+                    <li>Digital Branding & Product Packaging Design</li>
+                    <li>Software Consultancy & Tally Solutions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+</body>
+</html>
