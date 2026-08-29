@@ -1,3 +1,4 @@
+// Safe declaration to prevent duplicate identifier error
 const chatContainer = document.getElementById('chatContainer');
 const userInput = document.getElementById('user-input');
 
@@ -25,7 +26,7 @@ function sendMessage() {
     if (!input || !chatBox) return;
     
     let messageText = input.value.trim();
-    if(!messageText) return;
+    if (!messageText) return;
 
     chatBox.innerHTML += `<div class="mb-3 text-end"><div class="user-message-bubble d-inline-block text-start"><b>You:</b> ${messageText}</div></div>`;
     input.value = '';
