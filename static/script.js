@@ -1,207 +1,135 @@
-<script>
-    // --- देश पहचान और अलग-अलग प्राइस कैलकुलेशन के लिए ग्लोबल वेरिएबल्स ---
-    let currentCurrencySymbol = '₹';
-    let currencyMultiplier = 1;
+const chatContainer = document.getElementById('chatContainer');
+const userInput = document.getElementById('user-input');
 
-    // 1. देश पहचान कर करेंसी सेट करने का फंक्शन
-    async function detectCountryAndSetCurrency() {
-        try {
-            let response = await fetch('https://ipapi.co/json/');
-            let data = await response.json();
-            let country = data.country_code; // जैसे 'US', 'IN'
-            
-            if (country === 'US') {
-                currentCurrencySymbol = '$';
-                currencyMultiplier = 1 / 83; // 1 USD = 83 INR अनुमानित दर
-            } else {
-                currentCurrencySymbol = '₹';
-                currencyMultiplier = 1;
-            }
-            updateAllPricesDisplay();
-        } catch (e) {
-            console.log('Geo-IP detection default to INR');
-        }
+function toggleExpand(e) {
+    if (e) e.stopPropagation();
+    if (!chatContainer) return;
+    chatContainer.classList.toggle('expanded');
+    let btn = document.getElementById('expandBtn');
+    if (btn) {
+        btn.innerHTML = chatContainer.classList.contains('expanded') ? `<i class="bi bi-arrows-angle-contract"></i> छोटा करें` : `<i class="bi bi-arrows-angle-expand"></i> बड़ा करें`;
     }
+}
 
-    // सभी प्राइसेस को रिफ्रेश और अपडेट करने का फंक्शन
-    function updateAllPricesDisplay() {
-        document.querySelectorAll('.dynamic-price').forEach(el => {
-            let baseInr = parseFloat(el.getAttribute('data-inr')) || 0;
-            let finalVal = baseInr * currencyMultiplier;
-            if (currentCurrencySymbol === '$') {
-                el.innerText = '$' + finalVal.toFixed(2);
-            } else {
-                el.innerText = '₹' + baseInr.toLocaleString('en-IN');
-            }
-        });
-        calculateTotal();
-    }
-
-    // चुनी गई समस्याओं का अलग-अलग प्राइस जोड़कर कुल योग निकालने का फंक्शन
-    function calculateTotal() {
-        let totalInr = 0;
-        document.querySelectorAll('.problem-chk:checked').forEach(chk => {
-            totalInr += parseInt(chk.getAttribute('data-price')) || 0;
-        });
-        
-        let totalElement = document.getElementById('totalAmountText');
-        if (totalElement) {
-            totalElement.setAttribute('data-inr', totalInr);
-            let displayVal = totalInr * currencyMultiplier;
-            if (currentCurrencySymbol === '$') {
-                totalElement.innerText = '$' + displayVal.toFixed(2);
-            } else {
-                totalElement.innerText = '₹' + totalInr.toLocaleString('en-IN');
-            }
-        }
-    }
-
-    // यूनिफाइड Razorpay पेमेंट ट्रिगर फंक्शन (सभी बटनों के लिए एक समान)
-    function payWithRazorpay() {
-        let totalInr = 0;
-        let selectedList = [];
-        document.querySelectorAll('.problem-chk:checked').forEach(chk => {
-            totalInr += parseInt(chk.getAttribute('data-price')) || 0;
-            selectedList.push(chk.getAttribute('data-name'));
-        });
-        
-        // यदि यूजर ने कोई समस्या नहीं चुनी है, तो डिफ़ॉल्ट 999 लें, अन्यथा कुल योग लें
-        let amountVal = totalInr > 0 ? totalInr : 999;
-        
-        let nameInput = document.getElementById('name');
-        let emailInput = document.getElementById('email');
-        let phoneInput = document.getElementById('phone');
-
-        let options = {
-            "key": "rzp_live_TLGQmCY5RuAV2e", // आपकी मुख्य वेरीफाइड लाइव की
-            "amount": amountVal * 100, // हमेशा पैसे (Paise) में वैल्यू जाती है
-            "currency": "INR",
-            "name": "Insightify Tech Innovations",
-            "description": selectedList.length > 0 ? "Selected AI Solutions (" + selectedList.length + " items)" : "Global AI SEO & IT Services Consultation",
-            "image": "/static/images/img1.png",
-            "handler": function (response){
-                alert("भुगतान सफल रहा! Payment ID: " + response.razorpay_payment_id);
-            },
-            "prefill": {
-                "name": nameInput ? (nameInput.value || "Vikash Agrawal") : "Vikash Agrawal",
-                "email": emailInput ? (emailInput.value || "insightifytechinnovations@gmail.com") : "insightifytechinnovations@gmail.com",
-                "contact": phoneInput ? (phoneInput.value || "8077644565") : "8077644565"
-            },
-            "theme": {
-                "color": "#38bdf8"
-            }
-        };
-        
-        if (typeof Razorpay !== 'undefined') {
-            let rzp1 = new Razorpay(options);
-            rzp1.open();
-        } else {
-            alert("Razorpay SDK loaded incorrectly or missing.");
-        }
-    }
-
-    // बैकवर्ड कम्पैटिबिलिटी के लिए alias (ताकि पुराना नाम भी काम करता रहे)
-    function paySelectedProblems() {
-        payWithRazorpay();
-    }
-
-    // Existing sendMessage function support for chat input enter key or button click
-    function sendMessage() {
-        let userInput = document.getElementById('user-input');
-        let chatBox = document.getElementById('chat-box');
-        
-        if (!userInput || !userInput.value.trim()) return;
-        
-        let messageText = userInput.value.trim();
-        
-        chatBox.innerHTML += `<div class="mb-3 text-end">
-            <div class="user-message-bubble d-inline-block bg-info text-dark p-2 rounded" style="max-width: 92%;">
-                ${messageText}
-            </div>
-        </div>`;
-        
-        userInput.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
-        
-        fetch('/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: messageText })
-        })
-        .then(response => response.json())
-        .then(data => {
-            chatBox.innerHTML += `<div class="mb-3">
-                <div class="ai-message-bubble d-inline-block p-2 rounded bg-dark text-light border border-info" style="max-width: 92%;">
-                    <div class="d-flex align-items-center mb-1">
-                        <i class="bi bi-cpu-fill text-info me-2"></i>
-                        <strong class="text-info">Insightify AI Expert</strong>
-                    </div>
-                    ${data.reply}
-                </div>
-            </div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        })
-        .catch(error => {
-            console.error('Chat Error:', error);
-            chatBox.innerHTML += `<div class="mb-3">
-                <div class="ai-message-bubble d-inline-block border-danger p-2 rounded bg-dark text-light" style="max-width: 92%;">
-                    <div class="d-flex align-items-center mb-1">
-                        <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
-                        <strong class="text-danger">System Error</strong>
-                    </div>
-                    क्षमा करें, सर्वर से संपर्क करने में समस्या आ रही है। कृपया सीधे कॉल करें: <strong>+91 8077644565</strong>
-                </div>
-            </div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
-    }
-
-    function handleScanSubmit(event) {
-        event.preventDefault();
-        
-        let form = document.getElementById('seo-form');
-        let formData = new FormData(form);
-        
-        let name = formData.get('Name');
-        let url = formData.get('Website_URL');
-        
-        let resNameEl = document.getElementById('resName');
-        let resUrlEl = document.getElementById('resUrl');
-        
-        if (resNameEl) resNameEl.innerText = name || 'Valued Client';
-        if (resUrlEl) resUrlEl.innerText = url || 'https://...';
-        
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        }).then(response => {
-            let scanModalElement = document.getElementById('seo-form') && document.getElementById('scanResultModal');
-            if (scanModalElement && typeof bootstrap !== 'undefined') {
-                let scanModal = new bootstrap.Modal(scanModalElement);
-                scanModal.show();
-            }
-            form.reset();
-        }).catch(error => {
-            console.error('Submission Error:', error);
-            let scanModalElement = document.getElementById('scanResultModal');
-            if (scanModalElement && typeof bootstrap !== 'undefined') {
-                let scanModal = new bootstrap.Modal(scanModalElement);
-                scanModal.show();
-            }
-            form.reset();
-        });
-    }
-
-    // पेज लोड होते ही देश पहचान कर करेंसी सेट करने का ऑटो-ट्रिगर
-    window.addEventListener('DOMContentLoaded', () => {
-        detectCountryAndSetCurrency();
-        
-        // चेकबॉक्स बदलने पर टोटल अमाउंट ऑटोमैटिक कैलकुलेट हो
-        document.querySelectorAll('.problem-chk').forEach(chk => {
-            chk.addEventListener('change', calculateTotal);
-        });
+if (userInput) {
+    userInput.addEventListener('focus', function() {
+        if (chatContainer) chatContainer.classList.add('expanded');
+        let expandBtn = document.getElementById('expandBtn');
+        if (expandBtn) expandBtn.innerHTML = `<i class="bi bi-arrows-angle-contract"></i> छोटा करें`;
     });
-</script>
-</body>
-</html>
+}
+
+function sendMessage() {
+    let input = document.getElementById('user-input');
+    let chatBox = document.getElementById('chat-box');
+    if (!input || !chatBox) return;
+    
+    let messageText = input.value.trim();
+    if(!messageText) return;
+
+    chatBox.innerHTML += `<div class="mb-3 text-end"><div class="user-message-bubble d-inline-block text-start"><b>You:</b> ${messageText}</div></div>`;
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: messageText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        chatBox.innerHTML += `<div class="mb-3"><div class="ai-message-bubble d-inline-block"><strong class="text-info">Insightify AI Expert</strong><br>${data.response}</div></div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    })
+    .catch(() => {
+        chatBox.innerHTML += `<div class="mb-3"><div class="ai-message-bubble d-inline-block"><strong class="text-info">Insightify AI Expert</strong><br>संपर्क करें: 8077644565</div></div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+}
+
+function calculateTotal() {
+    let totalInr = 0;
+    document.querySelectorAll('.problem-chk:checked').forEach(chk => {
+        totalInr += parseInt(chk.getAttribute('data-price')) || 0;
+    });
+    let totalElement = document.getElementById('totalAmountText');
+    if (totalElement) {
+        totalElement.innerText = '₹' + totalInr.toLocaleString('en-IN');
+    }
+}
+
+function handleScanSubmit(event) {
+    event.preventDefault(); 
+    let nameElem = document.getElementById('name');
+    let webElem = document.getElementById('website');
+    let resName = document.getElementById('resName');
+    let resUrl = document.getElementById('resUrl');
+
+    if (resName) resName.innerText = nameElem ? nameElem.value || "Valued User" : "Valued User";
+    if (resUrl) resUrl.innerText = webElem ? webElem.value || "https://..." : "https://...";
+    
+    let modalEl = document.getElementById('scanResultModal');
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        new bootstrap.Modal(modalEl).show();
+    }
+}
+
+function paySelectedProblems() {
+    let totalInr = 0;
+    let selectedList = [];
+    document.querySelectorAll('.problem-chk:checked').forEach(chk => {
+        totalInr += parseInt(chk.getAttribute('data-price')) || 0;
+        selectedList.push(chk.getAttribute('data-name'));
+    });
+    
+    if(totalInr === 0) { alert("कृपया कम से कम एक समस्या (Problem) चुनें!"); return; }
+    
+    let nameElem = document.getElementById('name');
+    let emailElem = document.getElementById('email');
+    let phoneElem = document.getElementById('phone');
+
+    var options = {
+        "key": "rzp_live_TUiu15xHh1ZWpr",
+        "amount": totalInr * 100, 
+        "currency": "INR",
+        "name": "Insightify Tech Innovations",
+        "description": "Selected AI Website Audit Solutions (" + selectedList.length + " items)",
+        "handler": function (response){
+            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        },
+        "prefill": {
+            "name": nameElem ? nameElem.value : "Valued Client",
+            "email": emailElem ? emailElem.value : "insightifytechinnovations@gmail.com",
+            "contact": phoneElem ? phoneElem.value : "8077644565"
+        },
+        "theme": { "color": "#38bdf8" }
+    };
+    new Razorpay(options).open();
+}
+
+function payWithRazorpay() {
+    let payAmountElem = document.getElementById('payAmount');
+    let amountVal = payAmountElem ? payAmountElem.value || 999 : 999;
+    
+    let nameElem = document.getElementById('name');
+    let emailElem = document.getElementById('email');
+    let phoneElem = document.getElementById('phone');
+
+    var options = {
+        "key": "rzp_live_TUiu15xHh1ZWpr",
+        "amount": amountVal * 100, 
+        "currency": "INR",
+        "name": "Insightify Tech Innovations",
+        "description": "SEO & AI Services Consultation Fee",
+        "handler": function (response){
+            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        },
+        "prefill": {
+            "name": nameElem ? nameElem.value : "Valued Client",
+            "email": emailElem ? emailElem.value : "insightifytechinnovations@gmail.com",
+            "contact": phoneElem ? phoneElem.value : "8077644565"
+        },
+        "theme": { "color": "#38bdf8" }
+    };
+    new Razorpay(options).open();
+}
