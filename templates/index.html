@@ -460,35 +460,30 @@
         <div class="col-lg-8 glass-card mb-5">
             <h3 class="text-center mb-4 text-white fs-1 fw-bold">Get Your SEO & Audit</h3>
             
-            <form id="seo-form" action="https://formsubmit.co/insightifytechinnovations@gmail.com" method="POST" onsubmit="handleScanSubmit(event)">
-                <input type="hidden" name="_subject" value="New Website Lead / Scan Request - Insightify Tech">
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
-                
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                    <input type="text" name="Name" id="name" class="form-control" placeholder="Enter Your Full Name (पूरा नाम दर्ज करें)" required>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter Your Email Address (ईमेल आईडी)" required>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-                    <input type="tel" name="Phone" id="phone" class="form-control" placeholder="Enter WhatsApp Number (व्हाट्सएप नंबर)" required>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-globe"></i></span>
-                    <input type="text" name="Website_URL" id="website" class="form-control" placeholder="Enter Website URL (वेबसाइट लिंक https://...)" required>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-chat-text"></i></span>
-                    <textarea name="Requirements" id="requirements" class="form-control" placeholder="Enter Requirements / Address details" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary w-100 mb-3"><i class="bi bi-search me-2"></i> Scan Website Problems</button>
-                <div class="text-center secure-badge"><i class="bi bi-shield-lock-fill me-2"></i> 100% Secure AI Audit Active</div>
-                <input type="hidden" name="_next" value="https://personal-website-azr8.onrender.com/">
-            </form>
+          <form id="seo-form" action="/send-seo-audit" method="POST" onsubmit="handleScanSubmit(event)">
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-person"></i></span>
+        <input type="text" name="Name" id="name" class="form-control" placeholder="Enter Your Full Name (पूरा नाम दर्ज करें)" required>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+        <input type="email" name="email" id="email" class="form-control" placeholder="Enter Your Email Address (ईमेल आईडी)" required>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
+        <input type="tel" name="Phone" id="phone" class="form-control" placeholder="Enter WhatsApp Number (व्हाट्सएप नंबर)" required>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-globe"></i></span>
+        <input type="text" name="Website_URL" id="website" class="form-control" placeholder="Enter Website URL (वेबसाइट लिंक https://...)" required>
+    </div>
+    <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-chat-text"></i></span>
+        <textarea name="Requirements" id="requirements" class="form-control" placeholder="Enter Requirements / Address details" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 mb-3"><i class="bi bi-search me-2"></i> Scan Website Problems</button>
+    <div class="text-center secure-badge"><i class="bi bi-shield-lock-fill me-2"></i> 100% Secure AI Audit Active</div>
+</form>
             
             <div class="payment-box">
                 <h4 class="text-info fw-bold mb-3" style="font-size: 1.8rem;">Pay Online Securely via Razorpay</h4>
