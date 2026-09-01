@@ -3,9 +3,9 @@ gunicorn==21.2.0
 requests==2.31.0
 python-dotenv==1.0.1
 Werkzeug==3.0.3
-razorpay
-openai
-brevo-python
-apscheduler
-sib-api-v3-sdk
-google-generativeai
+razorpay==1.4.1
+openai==1.14.1
+brevo-python==1.0.0
+apscheduler==3.10.4
+sib-api-v3-sdk==7.6.0
+google-generativeai==0.3.2

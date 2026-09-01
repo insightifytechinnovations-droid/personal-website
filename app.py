@@ -16,13 +16,13 @@ app = Flask(__name__)
 # GST Constant (18%)
 GST_RATE = 0.18
 
-# Email Automation Function (Updated with your official email)
+# Email Automation Function
 def send_completion_email(client_email, work_details):
     msg = EmailMessage()
     msg['Subject'] = 'Your SEO Work & Auto-Fix Report - Insightify Tech Innovations'
     msg['From'] = 'insightifytechinnovations@gmail.com'
     msg['To'] = client_email
-    msg['Cc'] = 'insightifytechinnovations@gmail.com' # आपकी मेल पर भी प्रूफ रिपोर्ट भेजने के लिए
+    msg['Cc'] = 'insightifytechinnovations@gmail.com'
     msg.set_content(f"Dear Client,\n\nYour selected website issues have been successfully auto-fixed by Insightify Tech AI System.\n\nWork & Problem Details:\n{work_details}\n\n100% Secure & Verified Proof Report Attached/Processed.\n\nThank you for choosing Insightify Tech Innovations Private Limited.\n\nSupport Helpline: +91 8077644565\nGSTIN: 09AACHI6384B1ZG")
     
     try:
@@ -83,7 +83,7 @@ def pay():
     
     return jsonify({'payment_url': link.get('short_url')})
 
-# --- एडवांस्ड ऑटो-फिक्स और पेमेंट वेरिफिकेशन राउट (AI Fixer Integrated) ---
+# --- एडवांस्ड ऑटो-फिक्स और पेमेंट वेरिफिकेशन राउट ---
 @app.route('/process-autofix', methods=['POST'])
 def process_autofix():
     data = request.json
@@ -156,7 +156,7 @@ def send_single_outreach(to_email, client_name, subject, message):
         print(f"Error sending email to {to_email}: {e}")
         return False
 
-# --- सोशल मीडिया (Facebook, Instagram, X) पर ऑटो-पोस्टिंग फंक्शन्स ---
+# --- सोशल मीडिया ऑटो-पोस्टिंग फंक्शन्स ---
 def post_to_facebook_instagram(ad_message):
     page_access_token = os.environ.get("FB_PAGE_ACCESS_TOKEN", "YOUR_FB_TOKEN")
     page_id = os.environ.get("FB_PAGE_ID", "YOUR_PAGE_ID")
@@ -193,7 +193,7 @@ def post_to_twitter(ad_message):
     except Exception as e:
         print(f"Error connecting to Twitter API: {e}")
 
-# --- एआई द्वारा हर दिन नया स्मार्ट ऐड जनरेट करने और सभी प्लेटफॉर्म्स पर भेजने का शेड्यूलर जॉब ---
+# --- शेड्यूलर जॉब ---
 def daily_ai_smart_campaign():
     print("AI generating new smart advertisement for today...")
     try:
@@ -207,34 +207,19 @@ def daily_ai_smart_campaign():
     except Exception as e:
         daily_ad_message = "Boost your website performance, fix technical errors, and grow your business with Insightify Tech Innovations AI automation tools."
 
-    # 1. सोशल मीडिया पर ऑटो-पोस्ट करना (Facebook, Instagram, X)
     post_to_facebook_instagram(daily_ad_message)
     post_to_twitter(daily_ad_message)
-
-    # 2. ईमेल कैंपेन (20,000 लोगों तक)
-    subject = "Daily Special Offer: Instant AI Website Audit & Error Fixing"
-    recipients_list = [
-        # {'email': 'client1@gmail.com', 'name': 'Client One'}
-    ]
-    
-    print(f"Starting daily campaign dispatch to {len(recipients_list)} target recipients...")
-    success_count = 0
-    for person in recipients_list:
-        if send_single_outreach(person['email'], person.get('name', 'Business Owner'), subject, daily_ad_message):
-            success_count += 1
-            
-    print(f"Daily AI Campaign executed. Successfully sent to {success_count} persons via email & social media.")
 
 # --- शाम की परफॉर्मेंस रिपोर्ट भेजने का फंक्शन ---
 def send_daily_evening_report():
     print("Generating daily performance report for evening dispatch...")
     
-    total_ads_sent = 20000       # आज भेजे गए कुल विज्ञापन/मेल्स
-    total_engaged = 1250         # कितनों ने देखा/इंटरेक्ट किया
-    total_website_visits = 850   # वेबसाइट पर कुल विजिटर्स
-    total_work_completed = 45    # कितनों का काम पूरा हुआ (Auto-Fixed)
-    total_payments_done = 38     # सफल पेमेंट करने वाले क्लाइंट्स
-    total_revenue = 38000        # कुल कमाई (INR)
+    total_ads_sent = 20000
+    total_engaged = 1250
+    total_website_visits = 850
+    total_work_completed = 45
+    total_payments_done = 38
+    total_revenue = 38000
     
     report_subject = "📊 Daily Performance & Business Report - Insightify Tech Innovations"
     
@@ -275,11 +260,9 @@ def send_daily_evening_report():
     except Exception as e:
         print(f"Error sending evening report: {e}")
 
-# बैकग्राउंड शेड्यूलर सेटअप (जो रोज अपने समय पर काम करेगा)
+# बैकग्राउंड शेड्यूलर सेटअप
 scheduler = BackgroundScheduler()
-# हर दिन सुबह 10:00 बजे नया एआई ऐड जनरेट करके सभी जगह पोस्ट/सेंड करेगा
 scheduler.add_job(func=daily_ai_smart_campaign, trigger="cron", hour=10, minute=0)
-# हर दिन शाम 7:00 बजे पूरी परफॉर्मेंस रिपोर्ट आपकी जीमेल पर भेजेगा
 scheduler.add_job(func=send_daily_evening_report, trigger="cron", hour=19, minute=0)
 scheduler.start()
 
