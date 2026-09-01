@@ -658,7 +658,7 @@
 
     function executeRazorpayPayment(paise, description) {
         var options = {
-            "key": "rzp_live_YOUR_KEY_HERE", // Replace with live Razorpay Key if needed
+            "key": "rzp_live_YOUR_KEY_HERE", 
             "amount": paise, 
             "currency": "INR",
             "name": "Insightify Tech Innovations",
@@ -710,16 +710,16 @@
         input.value = '';
         chatBox.scrollTop = chatBox.scrollHeight;
 
-        // Simulated intelligent AI Response based on company context
+        // Intelligent AI Response based on company context
         setTimeout(() => {
             let reply = "Insightify Tech Innovations Private Limited Hathras में स्थित एक ISO Certified IT & Software Development संस्थान है। आप हमारी सेवाओं या SEO Audit के लिए ऊपर फॉर्म भर सकते हैं।";
             const lower = text.toLowerCase();
-            if(lower.includes('price') || lower.includes('fees') || lower.includes('cost') || lower.includes('rates')) {
+            if(lower.includes('price') || lower.includes('fees') || lower.includes('cost') || lower.includes('rates') || lower.includes('kitna') || lower.includes('फीस')) {
                 reply = "हमारी शुरुआती SEO ऑडिट और कंसल्टेशन फीस मात्र ₹999 है। आप ऊपर दिए गए फॉर्म से अपनी वेबसाइट स्कैन करके जरूरत के अनुसार पैकेज चुन सकते हैं।";
-            } else if(lower.includes('contact') || lower.includes('phone') || lower.includes('number') || lower.includes('address')) {
+            } else if(lower.includes('contact') || lower.includes('phone') || lower.includes('number') || lower.includes('address') || lower.includes('mobile') || lower.includes('सम्पर्क')) {
                 reply = "हेल्पलाइन नंबर: +91 8077644565, ईमेल: insightifytechinnovations@gmail.com, ऑफिस: Hathras, Uttar Pradesh।";
-            } else if(lower.includes('gst') || lower.includes('pan')) {
-                reply = "Insightify Tech Innovations Private Limited का GSTIN नंबर 09AACHI6384B1ZG है।";
+            } else if(lower.includes('gst') || lower.includes('pan') || lower.includes('company')) {
+                reply = "Insightify Tech Innovations Private Limited का GSTIN नंबर 09AACHI6384B1ZG है। हम वेब डेवलपमेंट, सॉफ्टवेयर और ग्लोबल एआई एसईओ सेवाएं प्रदान करते हैं।";
             }
 
             chatBox.innerHTML += `
