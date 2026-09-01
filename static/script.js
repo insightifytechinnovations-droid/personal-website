@@ -18,6 +18,13 @@ if (userInput) {
         let expandBtn = document.getElementById('expandBtn');
         if (expandBtn) expandBtn.innerHTML = `<i class="bi bi-arrows-angle-contract"></i> छोटा करें`;
     });
+
+    // Enter बटन दबाने पर भी मैसेज सेंड होने के लिए फीचर जोड़ा गया है
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
 }
 
 function sendMessage() {
