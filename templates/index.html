@@ -87,7 +87,6 @@
             letter-spacing: 0.5px;
         }
         
-        /* Language Container Styling */
         .lang-container {
             position: fixed;
             top: 50%;
@@ -124,15 +123,6 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
         }
-        .goog-te-combo option {
-            font-size: 1.4rem !important;
-            background: #0f172a !important;
-            color: #ffffff !important;
-            padding: 12px !important;
-        }
-
-        .goog-te-banner-frame { display: none !important; }
-        body { top: 0 !important; }
 
         .glass-card { 
             background: rgba(30, 41, 59, 0.85); 
@@ -227,7 +217,6 @@
             transform: scale(1.05);
         }
 
-        /* Smart Chat Container */
         .smart-chat-container {
             position: fixed;
             bottom: 20px;
@@ -291,6 +280,7 @@
             border-radius: 14px;
             padding: 14px 18px;
             color: #ffffff;
+            margin-bottom: 10px;
         }
 
         .user-message-bubble {
@@ -299,6 +289,8 @@
             font-weight: bold;
             border-radius: 14px;
             padding: 14px 18px;
+            margin-bottom: 10px;
+            text-align: right;
         }
 
         .smart-chat-footer {
@@ -326,7 +318,6 @@
             font-weight: bold !important;
         }
 
-        /* Footer */
         .footer { 
             background: linear-gradient(135deg, #020617, #0f172a); 
             padding: 50px 0; 
@@ -353,28 +344,20 @@
             margin-top: 25px;
         }
 
-        .carousel-item img { height: 350px; object-fit: cover; border-radius: 15px; }
-        
-        /* ================= हाई-कंट्रास्ट और बड़े फॉन्ट वाले समस्या बॉक्स ================= */
         .problem-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #ffffff !important; /* साफ़ सफ़ेद बैकग्राउंड ताकि टेक्स्ट एक बार में चमक उठे */
+            background: #ffffff !important;
             border: 3px solid #0284c7 !important;
             padding: 22px 25px !important;
             margin-bottom: 18px !important;
             border-radius: 16px !important;
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            transition: all 0.2s ease-in-out;
-        }
-        .problem-item:hover {
-            border-color: #22c55e !important;
-            transform: scale(1.01);
         }
         .problem-item span.problem-text {
             font-size: 1.5rem !important;
-            color: #0f172a !important; /* गहरा डार्क कलर ताकि एकदम साफ़ पढ़े जा सके */
+            color: #0f172a !important;
             font-weight: 800 !important;
         }
         .problem-item input[type="checkbox"] {
@@ -391,18 +374,6 @@
             padding: 6px 16px;
             border-radius: 10px;
             border: 2px solid #bae6fd;
-        }
-        /* ========================================================================= */
-        
-        @media (max-width: 768px) {
-            .company-full-title { font-size: 1.8rem !important; }
-            .hero-subtitle-large { font-size: 1.4rem !important; }
-            .carousel-item img { height: 200px; }
-            .glass-card { padding: 20px; }
-            .lang-container { right: 10px; padding: 12px 15px; min-width: 150px; }
-            .smart-chat-container, .smart-chat-container.expanded { width: 94%; right: 3%; bottom: 10px; }
-            .problem-item { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .problem-item span.problem-text { font-size: 1.3rem !important; }
         }
     </style>
 </head>
@@ -443,47 +414,35 @@
     <p class="hero-subtitle-large">Global AI-Driven Digital Solutions | Hathras to World</p>
 </div>
 
-<div class="container-fluid mb-5 px-4">
-    <div id="companyCarousel" class="carousel slide shadow-lg" data-bs-ride="carousel">
-        <div class="carousel-inner rounded-3">
-            <div class="carousel-item active"><img src="/static/images/img1.png" class="d-block w-100" alt="Project 1"></div>
-            <div class="carousel-item"><img src="/static/images/img2.png" class="d-block w-100" alt="Project 2"></div>
-            <div class="carousel-item"><img src="/static/images/img3.png" class="d-block w-100" alt="Project 3"></div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#companyCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
-        <button class="carousel-control-next" type="button" data-bs-target="#companyCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
-    </div>
-</div>
-
 <div class="container-fluid px-4 mb-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 glass-card mb-5">
             <h3 class="text-center mb-4 text-white fs-1 fw-bold">Get Your SEO & Audit</h3>
             
-          <form id="seo-form" action="/send-seo-audit" method="POST" onsubmit="handleScanSubmit(event)">
-    <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-person"></i></span>
-        <input type="text" name="Name" id="name" class="form-control" placeholder="Enter Your Full Name (पूरा नाम दर्ज करें)" required>
-    </div>
-    <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-        <input type="email" name="email" id="email" class="form-control" placeholder="Enter Your Email Address (ईमेल आईडी)" required>
-    </div>
-    <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-        <input type="tel" name="Phone" id="phone" class="form-control" placeholder="Enter WhatsApp Number (व्हाट्सएप नंबर)" required>
-    </div>
-    <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-globe"></i></span>
-        <input type="text" name="Website_URL" id="website" class="form-control" placeholder="Enter Website URL (वेबसाइट लिंक https://...)" required>
-    </div>
-    <div class="input-group">
-        <span class="input-group-text"><i class="bi bi-chat-text"></i></span>
-        <textarea name="Requirements" id="requirements" class="form-control" placeholder="Enter Requirements / Address details" rows="3"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary w-100 mb-3"><i class="bi bi-search me-2"></i> Scan Website Problems</button>
-    <div class="text-center secure-badge"><i class="bi bi-shield-lock-fill me-2"></i> 100% Secure AI Audit Active</div>
-</form>
+            <form id="seo-form" onsubmit="handleScanSubmit(event)">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" name="Name" id="name" class="form-control" placeholder="Enter Your Full Name (पूरा नाम दर्ज करें)" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter Your Email Address (ईमेल आईडी)" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
+                    <input type="tel" name="Phone" id="phone" class="form-control" placeholder="Enter WhatsApp Number (व्हाट्सएप नंबर)" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                    <input type="text" name="Website_URL" id="website" class="form-control" placeholder="Enter Website URL (वेबसाइट लिंक https://...)" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-chat-text"></i></span>
+                    <textarea name="Requirements" id="requirements" class="form-control" placeholder="Enter Requirements / Address details" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mb-3"><i class="bi bi-search me-2"></i> Scan Website Problems</button>
+                <div class="text-center secure-badge"><i class="bi bi-shield-lock-fill me-2"></i> 100% Secure AI Audit Active</div>
+            </form>
             
             <div class="payment-box">
                 <h4 class="text-info fw-bold mb-3" style="font-size: 1.8rem;">Pay Online Securely via Razorpay</h4>
@@ -499,7 +458,7 @@
     </div>
 </div>
 
-<!-- ================= नया हाई-विजिबिलिटी स्कैन रिजल्ट पॉपअप ================= -->
+<!-- Scan Result Modal -->
 <div class="modal fade" id="scanResultModal" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content text-dark shadow-lg" style="border: 4px solid #38bdf8 !important; border-radius: 24px !important; padding: 35px !important; background-color: #0b0f19 !important;">
@@ -570,8 +529,8 @@
         </div>
     </div>
 </div>
-<!-- ============================================================== -->
 
+<!-- Smart Chat Box -->
 <div class="smart-chat-container" id="chatContainer">
     <div class="smart-chat-header d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center">
@@ -598,7 +557,7 @@
     </div>
     <div class="smart-chat-footer">
         <div class="input-group mb-0">
-            <input type="text" id="user-input" class="form-control chat-input-box" placeholder="यहाँ सवाल पूछें...">
+            <input type="text" id="user-input" class="form-control chat-input-box" placeholder="यहाँ सवाल पूछें..." onkeypress="handleKeyPress(event)">
             <button class="btn btn-primary chat-send-btn shadow" type="button" onclick="sendMessage()"><i class="bi bi-send-fill"></i> भेजें</button>
         </div>
     </div>
@@ -615,7 +574,7 @@
     </div>
 </footer>
 
-<!-- Company & Services Modals -->
+<!-- Modals -->
 <div class="modal fade" id="companyModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark text-white border border-info p-3">
@@ -651,6 +610,129 @@
         </div>
     </div>
 </div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Handle Website Scan Form Submission & Open Result Modal
+    function handleScanSubmit(event) {
+        event.preventDefault();
+        const name = document.getElementById('name').value;
+        const website = document.getElementById('website').value;
+        
+        document.getElementById('resName').innerText = name;
+        document.getElementById('resUrl').innerText = website;
+        
+        var scanModal = new bootstrap.Modal(document.getElementById('scanResultModal'));
+        scanModal.show();
+    }
+
+    // Calculate total price of selected issues
+    function calculateTotal() {
+        let total = 0;
+        const checkboxes = document.querySelectorAll('.problem-chk:checked');
+        checkboxes.forEach((cb) => {
+            total += parseInt(cb.getAttribute('data-price') || 0);
+        });
+        document.getElementById('totalAmountText').innerText = '₹' + total;
+    }
+
+    // Razorpay Integration Payment Functions
+    function payWithRazorpay() {
+        const amount = document.getElementById('payAmount').value || 999;
+        executeRazorpayPayment(amount * 100, "Insightify Consultation");
+    }
+
+    function paySelectedProblems() {
+        let total = 0;
+        const checkboxes = document.querySelectorAll('.problem-chk:checked');
+        checkboxes.forEach((cb) => {
+            total += parseInt(cb.getAttribute('data-price') || 0);
+        });
+        if(total <= 0) {
+            alert("कृपया कम से कम एक समस्या (Problem) चुनें!");
+            return;
+        }
+        executeRazorpayPayment(total * 100, "Insightify AI Auto-Fix Services");
+    }
+
+    function executeRazorpayPayment(paise, description) {
+        var options = {
+            "key": "rzp_live_YOUR_KEY_HERE", // Replace with live Razorpay Key if needed
+            "amount": paise, 
+            "currency": "INR",
+            "name": "Insightify Tech Innovations",
+            "description": description,
+            "handler": function (response){
+                alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+            },
+            "prefill": {
+                "name": document.getElementById('name') ? document.getElementById('name').value : "Vikas Agrawal",
+                "email": document.getElementById('email') ? document.getElementById('email').value : "insightifytechinnovations@gmail.com",
+                "contact": document.getElementById('phone') ? document.getElementById('phone').value : "8077644565"
+            },
+            "theme": {
+                "color": "#38bdf8"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    // Expand/Collapse Chat Widget
+    function toggleExpand(e) {
+        const container = document.getElementById('chatContainer');
+        const btn = document.getElementById('expandBtn');
+        container.classList.toggle('expanded');
+        if(container.classList.contains('expanded')) {
+            btn.innerHTML = '<i class="bi bi-arrows-angle-contract"></i> छोटा करें';
+        } else {
+            btn.innerHTML = '<i class="bi bi-arrows-angle-expand"></i> बड़ा करें';
+        }
+    }
+
+    // Chat Messaging Logic
+    function handleKeyPress(e) {
+        if(e.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('user-input');
+        const text = input.value.trim();
+        if(!text) return;
+
+        const chatBox = document.getElementById('chat-box');
+        
+        // Append User Message
+        chatBox.innerHTML += `<div class="user-message-bubble">${text}</div>`;
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Simulated intelligent AI Response based on company context
+        setTimeout(() => {
+            let reply = "Insightify Tech Innovations Private Limited Hathras में स्थित एक ISO Certified IT & Software Development संस्थान है। आप हमारी सेवाओं या SEO Audit के लिए ऊपर फॉर्म भर सकते हैं।";
+            const lower = text.toLowerCase();
+            if(lower.includes('price') || lower.includes('fees') || lower.includes('cost') || lower.includes('rates')) {
+                reply = "हमारी शुरुआती SEO ऑडिट और कंसल्टेशन फीस मात्र ₹999 है। आप ऊपर दिए गए फॉर्म से अपनी वेबसाइट स्कैन करके जरूरत के अनुसार पैकेज चुन सकते हैं।";
+            } else if(lower.includes('contact') || lower.includes('phone') || lower.includes('number') || lower.includes('address')) {
+                reply = "हेल्पलाइन नंबर: +91 8077644565, ईमेल: insightifytechinnovations@gmail.com, ऑफिस: Hathras, Uttar Pradesh।";
+            } else if(lower.includes('gst') || lower.includes('pan')) {
+                reply = "Insightify Tech Innovations Private Limited का GSTIN नंबर 09AACHI6384B1ZG है।";
+            }
+
+            chatBox.innerHTML += `
+                <div class="mb-3">
+                    <div class="ai-message-bubble d-inline-block">
+                        <strong class="text-info">Insightify AI Expert</strong><br>
+                        ${reply}
+                    </div>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 700);
+    }
 </script>
 </body>
 </html>
