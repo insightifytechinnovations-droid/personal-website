@@ -1,17 +1,28 @@
 import os
 import openai
 
-# OpenAI API की सेटिंग्स (Render से OPENAI_API_KEY उठाएगा)
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-
 def insightify_ai_bot(message):
     try:
-        response = openai.chat.completions.create(
+        # क्लाइंट को फंक्शन के अंदर इनिशियलाइज किया गया है ताकि रनटाइम पर .env लोड हो सके
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            return "माफ़ कीजिए, OpenAI API Key सेट नहीं है।"
+            
+        client = openai.OpenAI(api_key=api_key)
+        
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system", 
-                    "content": "You are a professional and helpful AI assistant for Insightify Tech Innovations Private Limited, an IT services and software development firm based in Hathras, Uttar Pradesh. Help clients with web development, SEO audits, and technical queries. कृपया हिंदी में भी सहायता करें।"
+                    "content": (
+                        "You are a professional and helpful AI assistant for Insightify Tech Innovations Private Limited, "
+                        "an IT services and software development firm based in Hathras, Uttar Pradesh. Help clients with "
+                        "web development, SEO audits, and technical queries.\n\n"
+                        "CRITICAL INSTRUCTION: Always detect the language of the user's input message and respond in that "
+                        "exact same language. If the user types in Hindi, reply in Hindi. If they type in English, reply in English. "
+                        "If they use Hinglish, respond in a natural conversational Hinglish style."
+                    )
                 },
                 {
                     "role": "user", 

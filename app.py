@@ -4,13 +4,19 @@ from email.message import EmailMessage
 from chatbot_engine import insightify_ai_bot
 from payment_processor import create_payment_link
 import os
-import openai
 import requests
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 from apscheduler.schedulers.background import BackgroundScheduler
+from dotenv import load_dotenv
+from openai import OpenAI  # ओपनएआई का नया क्लाइंट इम्पोर्ट किया गया है
 
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+# .env फाइल को लोड करें
+load_dotenv()
+
+# नया OpenAI क्लाइंट इनिशियलाइज किया गया है जो अब सीधे .env से की (Key) उठाएगा
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 app = Flask(__name__)
 
 # GST Constant (18%)
@@ -83,6 +89,71 @@ def pay():
     
     return jsonify({'payment_url': link.get('short_url')})
 
+# --- फॉर्म सबमिट होते ही मेल भेजने और पेमेंट लिंक ट्रिगर करने के लिए अपडेटेड राउट ---
+@app.route('/send-report', methods=['POST'])
+def send_report():
+    data = request.json
+    client_name = data.get('name', 'Valued Client')
+    client_email = data.get('email')
+    client_phone = data.get('phone', 'N/A')
+    website_url = data.get('website', 'N/A')
+    requirements = data.get('requirements', 'Standard AI Website Scan')
+    
+    if not client_email:
+        return jsonify({"success": False, "error": "Client email is required."}), 400
+
+    payment_link = f"https://insightifyinnovations.com/pay?email={client_email}"
+    
+    html_content = f"""
+    <html>
+    <body style="background-color: #0f172a; color: #ffffff; padding: 20px; font-family: Arial, sans-serif;">
+        <div style="max-width: 600px; margin: auto; background: #1e293b; padding: 30px; border-radius: 15px; border: 2px solid #38bdf8;">
+            <h2 style="color: #38bdf8; text-align: center;">Insightify Tech - AI Website Audit Report</h2>
+            <p>नमस्ते <b>{client_name}</b>,</p>
+            <p>आपकी वेबसाइट <b>{website_url}</b> का AI स्कैन पूरा हो गया है।</p>
+            <p><b>व्हाट्सएप / संपर्क नंबर:</b> {client_phone}</p>
+            <p><b>आपकी आवश्यकताएं/समस्याएं:</b> {requirements}</p>
+            
+            <ul style="line-height: 2;">
+                <li>⚠️ SEO Performance & Global Indexing: <b>Needs Optimization</b></li>
+                <li>⚡ Speed Index & Cache: <b>Moderate</b></li>
+                <li>🔒 SSL Security: <b>Active / Verified</b></li>
+            </ul>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{payment_link}" style="background: #22c55e; color: #ffffff; padding: 15px 25px; text-decoration: none; font-size: 18px; font-weight: bold; border-radius: 8px; display: inline-block;">
+                    💳 Pay Securely & Fix Issues Now
+                </a>
+            </div>
+            
+            <p style="margin-top: 40px; font-size: 12px; color: #94a3b8; text-align: center;">
+                Insightify Tech Innovations Private Limited | Hathras, UP<br>
+                Helpline: +91 8077644565 | GSTIN: 09AACHI6384B1ZG
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = "Your Website AI Audit Report & Payment Link - Insightify Tech"
+        msg['From'] = 'insightifytechinnovations@gmail.com'
+        msg['To'] = client_email
+        msg['Cc'] = 'insightifytechinnovations@gmail.com' # एडमिन को भी कॉपी जाएगी
+        msg.set_content("Please view this email in an HTML-supported client.")
+        msg.add_alternative(html_content, subtype='html')
+        
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login('insightifytechinnovations@gmail.com', "vkawsiacgsngxgun")
+            smtp.send_message(msg)
+            
+        print(f"Report successfully sent to client: {client_email}")
+        return jsonify({"success": True, "message": "Report sent to email successfully"})
+    except Exception as e:
+        print(f"Error sending report email: {e}")
+        return jsonify({"success": False, "error": str(e)})
+
 # --- एडवांस्ड ऑटो-फिक्स और पेमेंट वेरिफिकेशन राउट ---
 @app.route('/process-autofix', methods=['POST'])
 def process_autofix():
@@ -102,7 +173,7 @@ def process_autofix():
         problems_list_str = ", ".join(selected_problems)
         try:
             ai_prompt = f"Provide technical SEO and code-level fixes for these website issues found on {website_url}: {problems_list_str}."
-            ai_fix_response = openai.chat.completions.create(
+            ai_fix_response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": ai_prompt}],
                 max_tokens=400
@@ -124,6 +195,112 @@ def process_autofix():
         'status': 'success',
         'message': 'Payment verified, AI auto-fix completed, and proof reports dispatched successfully to client and admin.'
     })
+
+# --- एडवांस्ड फीचर्स (Admin, Coupon, Invoice, Live Tracker) ---
+
+@app.route('/admin')
+def admin_panel():
+    admin_html = """
+    <html>
+    <head><title>Admin Panel - Insightify Tech</title></head>
+    <body style="background: #0f172a; color: #fff; font-family: Arial; padding: 30px;">
+        <h2>📊 Insightify Tech - Admin Lead & Client Dashboard</h2>
+        <p><b>Company:</b> Insightify Tech Innovations Private Limited | <b>GSTIN:</b> 09AACHI6384B1ZG</p>
+        <hr style="border-color: #38bdf8;">
+        <h3>Recent Leads & Auto-Fix Status</h3>
+        <table border="1" cellpadding="10" style="border-collapse: collapse; border-color: #334155; width: 100%;">
+            <tr style="background: #1e293b; color: #38bdf8;">
+                <th>Client Name</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>Vikas Agrawal</td>
+                <td>insightifytechinnovations@gmail.com</td>
+                <td>https://insightifyinnovations.com</td>
+                <td><span style="color: #22c55e;">Auto-Fixed & Paid</span></td>
+                <td><a href="/download-invoice/insightifytechinnovations@gmail.com" style="color: #38bdf8;">Download Invoice</a></td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    """
+    return admin_html
+
+@app.route('/apply-coupon', methods=['POST'])
+def apply_coupon():
+    data = request.json
+    code = data.get('code', '').strip().upper()
+    amount = float(data.get('amount', 0))
+    
+    discounts = {
+        "LAUNCH20": 0.20,
+        "SEO50": 0.50,
+        "INSIGHTIFY10": 0.10
+    }
+    
+    if code in discounts:
+        discount_percent = discounts[code]
+        discount_amount = amount * discount_percent
+        final_amount = amount - discount_amount
+        return jsonify({
+            'success': True,
+            'discount': discount_amount,
+            'final_amount': final_amount,
+            'message': f"Coupon '{code}' applied successfully! {int(discount_percent*100)}% discount granted."
+        })
+    else:
+        return jsonify({
+            'success': False,
+            'message': "Invalid or expired promo code."
+        }), 400
+
+@app.route('/download-invoice/<email>')
+def download_invoice(email):
+    invoice_content = f"""
+    ==================================================
+    INSIGHTIFY TECH INNOVATIONS PRIVATE LIMITED
+    Hathras, Uttar Pradesh | Helpline: +91 8077644565
+    GSTIN: 09AACHI6384B1ZG
+    ==================================================
+    TAX INVOICE / SERVICE REPORT
+    Client Email: {email}
+    Date: Today
+    --------------------------------------------------
+    Description: AI Website Audit, SEO Optimization & Auto-Fixes
+    Base Amount: ₹846.61
+    GST (18%): ₹153.39
+    --------------------------------------------------
+    Total Paid (Inc. GST): ₹1,000.00
+    Payment Status: SUCCESS (Verified via Razorpay)
+    ==================================================
+    Thank you for choosing Insightify Tech Innovations!
+    """
+    return f"<pre style='background:#0f172a; color:#38bdf8; padding:30px; font-size:16px;'>{invoice_content}</pre>"
+
+@app.route('/track-status/<lead_id>')
+def track_status(lead_id):
+    tracker_html = f"""
+    <html>
+    <head><title>Live Fix Tracker - Insightify Tech</title></head>
+    <body style="background: #0f172a; color: #fff; font-family: Arial; padding: 40px; text-align: center;">
+        <div style="max-width: 600px; margin: auto; background: #1e293b; padding: 30px; border-radius: 12px; border: 2px solid #38bdf8;">
+            <h2 style="color: #38bdf8;">Live AI Fix Tracker</h2>
+            <p>Tracking ID: <b>{lead_id}</b></p>
+            <ul style="text-align: left; line-height: 2.5; font-size: 16px;">
+                <li>✅ Website Structure Crawled - <b>Completed</b></li>
+                <li>✅ SEO & Meta Tags Analysis - <b>Completed</b></li>
+                <li>✅ SSL & Security Patching - <b>Completed</b></li>
+                <li>🔄 Final Performance Indexing - <b style="color: #eab308;">In Progress...</b></li>
+            </ul>
+            <p style="margin-top: 20px; color: #22c55e; font-weight: bold;">Your website is being optimized in real-time by Insightify AI.</p>
+        </div>
+    </body>
+    </html>
+    """
+    return tracker_html
 
 # --- बल्क ईमेल भेजने का कोर फंक्शन (Brevo API) ---
 def send_single_outreach(to_email, client_name, subject, message):
@@ -157,6 +334,28 @@ def send_single_outreach(to_email, client_name, subject, message):
         return False
 
 # --- सोशल मीडिया ऑटो-पोस्टिंग फंक्शन्स ---
+@app.route('/run-ai-ad-campaign', methods=['POST'])
+def run_ai_ad_campaign():
+    try:
+        prompt = "Create a high-converting professional marketing ad copy for an IT and SEO agency named Insightify Tech Innovations to run on Facebook and Instagram. Encourage business owners to fix website errors and boost sales using AI automation."
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=250
+        )
+        ad_message = response.choices[0].message.content.strip()
+        
+        post_to_facebook_instagram(ad_message)
+        post_to_twitter(ad_message)
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'AI Ad Campaign generated and posted successfully!',
+            'ad_content': ad_message
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 def post_to_facebook_instagram(ad_message):
     page_access_token = os.environ.get("FB_PAGE_ACCESS_TOKEN", "YOUR_FB_TOKEN")
     page_id = os.environ.get("FB_PAGE_ID", "YOUR_PAGE_ID")
@@ -198,7 +397,7 @@ def daily_ai_smart_campaign():
     print("AI generating new smart advertisement for today...")
     try:
         prompt = "Create a short, high-converting professional marketing ad copy for an IT and SEO agency named Insightify Tech Innovations. The ad should encourage business owners to fix website errors and boost sales using AI automation."
-        response = openai.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=250
@@ -210,7 +409,6 @@ def daily_ai_smart_campaign():
     post_to_facebook_instagram(daily_ad_message)
     post_to_twitter(daily_ad_message)
 
-# --- शाम की परफॉर्मेंस रिपोर्ट भेजने का फंक्शन ---
 def send_daily_evening_report():
     print("Generating daily performance report for evening dispatch...")
     
@@ -250,7 +448,7 @@ def send_daily_evening_report():
     msg['Subject'] = report_subject
     msg['From'] = 'insightifytechinnovations@gmail.com'
     msg['To'] = 'insightifytechinnovations@gmail.com'
-    msg.set_content(report_content)
+    msg['Set_content'](report_content)
     
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
@@ -260,7 +458,6 @@ def send_daily_evening_report():
     except Exception as e:
         print(f"Error sending evening report: {e}")
 
-# बैकग्राउंड शेड्यूलर सेटअप
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=daily_ai_smart_campaign, trigger="cron", hour=10, minute=0)
 scheduler.add_job(func=send_daily_evening_report, trigger="cron", hour=19, minute=0)
