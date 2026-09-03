@@ -4,7 +4,7 @@ requests==2.31.0
 python-dotenv==1.0.1
 Werkzeug==3.0.3
 razorpay==1.4.1
-openai==1.14.1
+openai==1.55.3
 brevo-python==1.0.0
 apscheduler==3.10.4
 sib-api-v3-sdk==7.6.0
