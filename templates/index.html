@@ -19,6 +19,16 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+        .brand-logo-img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 2px solid #38bdf8;
+            margin-right: 10px;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
         
         .nav-btn-custom { 
             color: #ffffff !important; 
@@ -61,10 +71,12 @@
             text-transform: uppercase;
         }
 
-        .iso-badge-custom i {
-            font-size: 2.4rem !important;
-            color: #22c55e !important;
-            margin-right: 10px;
+        .iso-badge-custom img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            margin-right: 12px;
+            vertical-align: middle;
         }
 
         .company-full-title {
@@ -85,6 +97,16 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 15px;
             letter-spacing: 0.5px;
+        }
+
+        .hero-banner-img {
+            width: 100%;
+            max-height: 320px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 3px solid #38bdf8;
+            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.4);
+            margin-bottom: 30px;
         }
         
         .lang-container {
@@ -251,6 +273,13 @@
             font-size: 1.6rem;
             color: #38bdf8;
             margin-right: 14px;
+            overflow: hidden;
+        }
+
+        .ai-avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .online-dot {
@@ -386,7 +415,11 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-4 py-3">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">Insightify <span class="text-primary">Tech</span></a>
+        <!-- Logo Image Added Here -->
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+            <img src="https://via.placeholder.com/150x150/0f172a/38bdf8?text=IT" alt="Logo" class="brand-logo-img">
+            Insightify <span class="text-primary ms-1">Tech</span>
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -407,11 +440,19 @@
 </nav>
 
 <div class="container-fluid py-4 text-center">
+    <!-- ISO Badge with Certification Logo Icon -->
     <div class="iso-badge-custom mb-3">
-        <i class="bi bi-patch-check-fill"></i> ISO Certified Institution
+        <img src="https://via.placeholder.com/50x50/22c55e/ffffff?text=ISO" alt="ISO"> ISO Certified Institution
     </div>
     <h1 class="company-full-title">Insightify Tech Innovations Private Limited</h1>
     <p class="hero-subtitle-large">Global AI-Driven Digital Solutions | Hathras to World</p>
+    
+    <!-- Hero Banner Visual Image Slideshow Added -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8">
+            <img id="dynamic-banner" src="{{ url_for('static', filename='images/img1.png') }}" alt="Tech Solutions Banner" class="hero-banner-img">
+        </div>
+    </div>
 </div>
 
 <div class="container-fluid px-4 mb-5">
@@ -535,7 +576,7 @@
     <div class="smart-chat-header d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center">
             <div class="ai-avatar-box">
-                <i class="bi bi-robot"></i>
+                <img src="https://via.placeholder.com/100x100/1e293b/38bdf8?text=AI" alt="AI Avatar">
                 <div class="online-dot"></div>
             </div>
             <div>
@@ -557,7 +598,7 @@
     </div>
     <div class="smart-chat-footer">
         <div class="input-group mb-0">
-            <input type="text" id="user-input" class="form-control chat-input-box" placeholder="यहाँ सवाल पूछें..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="user-input" class="form-control chat-input-box" placeholder="यहाँ सवाल पूछें...">
             <button class="btn btn-primary chat-send-btn shadow" type="button" onclick="sendMessage()"><i class="bi bi-send-fill"></i> भेजें</button>
         </div>
     </div>
@@ -614,125 +655,177 @@
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Handle Website Scan Form Submission & Open Result Modal
-    function handleScanSubmit(event) {
-        event.preventDefault();
-        const name = document.getElementById('name').value;
-        const website = document.getElementById('website').value;
-        
-        document.getElementById('resName').innerText = name;
-        document.getElementById('resUrl').innerText = website;
-        
-        var scanModal = new bootstrap.Modal(document.getElementById('scanResultModal'));
-        scanModal.show();
-    }
+// Safe declaration to prevent duplicate identifier error
+const chatContainer = document.getElementById('chatContainer');
+const userInput = document.getElementById('user-input');
 
-    // Calculate total price of selected issues
-    function calculateTotal() {
-        let total = 0;
-        const checkboxes = document.querySelectorAll('.problem-chk:checked');
-        checkboxes.forEach((cb) => {
-            total += parseInt(cb.getAttribute('data-price') || 0);
-        });
-        document.getElementById('totalAmountText').innerText = '₹' + total;
+function toggleExpand(e) {
+    if (e) e.stopPropagation();
+    if (!chatContainer) return;
+    chatContainer.classList.toggle('expanded');
+    let btn = document.getElementById('expandBtn');
+    if (btn) {
+        btn.innerHTML = chatContainer.classList.contains('expanded') ? `<i class="bi bi-arrows-angle-contract"></i> छोटा करें` : `<i class="bi bi-arrows-angle-expand"></i> बड़ा करें`;
     }
+}
 
-    // Razorpay Integration Payment Functions
-    function payWithRazorpay() {
-        const amount = document.getElementById('payAmount').value || 999;
-        executeRazorpayPayment(amount * 100, "Insightify Consultation");
-    }
+if (userInput) {
+    userInput.addEventListener('focus', function() {
+        if (chatContainer) chatContainer.classList.add('expanded');
+        let expandBtn = document.getElementById('expandBtn');
+        if (expandBtn) expandBtn.innerHTML = `<i class="bi bi-arrows-angle-contract"></i> छोटा करें`;
+    });
 
-    function paySelectedProblems() {
-        let total = 0;
-        const checkboxes = document.querySelectorAll('.problem-chk:checked');
-        checkboxes.forEach((cb) => {
-            total += parseInt(cb.getAttribute('data-price') || 0);
-        });
-        if(total <= 0) {
-            alert("कृपया कम से कम एक समस्या (Problem) चुनें!");
-            return;
-        }
-        executeRazorpayPayment(total * 100, "Insightify AI Auto-Fix Services");
-    }
-
-    function executeRazorpayPayment(paise, description) {
-        var options = {
-            "key": "rzp_live_YOUR_KEY_HERE", 
-            "amount": paise, 
-            "currency": "INR",
-            "name": "Insightify Tech Innovations",
-            "description": description,
-            "handler": function (response){
-                alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-            },
-            "prefill": {
-                "name": document.getElementById('name') ? document.getElementById('name').value : "Vikas Agrawal",
-                "email": document.getElementById('email') ? document.getElementById('email').value : "insightifytechinnovations@gmail.com",
-                "contact": document.getElementById('phone') ? document.getElementById('phone').value : "8077644565"
-            },
-            "theme": {
-                "color": "#38bdf8"
-            }
-        };
-        var rzp1 = new Razorpay(options);
-        rzp1.open();
-    }
-
-    // Expand/Collapse Chat Widget
-    function toggleExpand(e) {
-        const container = document.getElementById('chatContainer');
-        const btn = document.getElementById('expandBtn');
-        container.classList.toggle('expanded');
-        if(container.classList.contains('expanded')) {
-            btn.innerHTML = '<i class="bi bi-arrows-angle-contract"></i> छोटा करें';
-        } else {
-            btn.innerHTML = '<i class="bi bi-arrows-angle-expand"></i> बड़ा करें';
-        }
-    }
-
-    // Chat Messaging Logic
-    function handleKeyPress(e) {
-        if(e.key === 'Enter') {
+    // Enter बटन दबाने पर भी मैसेज सेंड होने के लिए फीचर जोड़ा गया है
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
             sendMessage();
         }
-    }
+    });
+}
 
-    function sendMessage() {
-        const input = document.getElementById('user-input');
-        const text = input.value.trim();
-        if(!text) return;
+function sendMessage() {
+    let input = document.getElementById('user-input');
+    let chatBox = document.getElementById('chat-box');
+    if (!input || !chatBox) return;
+    
+    let messageText = input.value.trim();
+    if (!messageText) return;
 
-        const chatBox = document.getElementById('chat-box');
-        
-        // Append User Message
-        chatBox.innerHTML += `<div class="user-message-bubble">${text}</div>`;
-        input.value = '';
+    chatBox.innerHTML += `<div class="mb-3 text-end"><div class="user-message-bubble d-inline-block text-start"><b>You:</b> ${messageText}</div></div>`;
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: messageText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        chatBox.innerHTML += `<div class="mb-3"><div class="ai-message-bubble d-inline-block"><strong class="text-info">Insightify AI Expert</strong><br>${data.response}</div></div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
+    })
+    .catch(() => {
+        chatBox.innerHTML += `<div class="mb-3"><div class="ai-message-bubble d-inline-block"><strong class="text-info">Insightify AI Expert</strong><br>संपर्क करें: 8077644565</div></div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+}
 
-        // Intelligent AI Response based on company context
-        setTimeout(() => {
-            let reply = "Insightify Tech Innovations Private Limited Hathras में स्थित एक ISO Certified IT & Software Development संस्थान है। आप हमारी सेवाओं या SEO Audit के लिए ऊपर फॉर्म भर सकते हैं।";
-            const lower = text.toLowerCase();
-            if(lower.includes('price') || lower.includes('fees') || lower.includes('cost') || lower.includes('rates') || lower.includes('kitna') || lower.includes('फीस')) {
-                reply = "हमारी शुरुआती SEO ऑडिट और कंसल्टेशन फीस मात्र ₹999 है। आप ऊपर दिए गए फॉर्म से अपनी वेबसाइट स्कैन करके जरूरत के अनुसार पैकेज चुन सकते हैं।";
-            } else if(lower.includes('contact') || lower.includes('phone') || lower.includes('number') || lower.includes('address') || lower.includes('mobile') || lower.includes('सम्पर्क')) {
-                reply = "हेल्पलाइन नंबर: +91 8077644565, ईमेल: insightifytechinnovations@gmail.com, ऑफिस: Hathras, Uttar Pradesh।";
-            } else if(lower.includes('gst') || lower.includes('pan') || lower.includes('company')) {
-                reply = "Insightify Tech Innovations Private Limited का GSTIN नंबर 09AACHI6384B1ZG है। हम वेब डेवलपमेंट, सॉफ्टवेयर और ग्लोबल एआई एसईओ सेवाएं प्रदान करते हैं।";
-            }
-
-            chatBox.innerHTML += `
-                <div class="mb-3">
-                    <div class="ai-message-bubble d-inline-block">
-                        <strong class="text-info">Insightify AI Expert</strong><br>
-                        ${reply}
-                    </div>
-                </div>
-            `;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }, 700);
+function calculateTotal() {
+    let totalInr = 0;
+    document.querySelectorAll('.problem-chk:checked').forEach(chk => {
+        totalInr += parseInt(chk.getAttribute('data-price')) || 0;
+    });
+    let totalElement = document.getElementById('totalAmountText');
+    if (totalElement) {
+        totalElement.innerText = '₹' + totalInr.toLocaleString('en-IN');
     }
+}
+
+function handleScanSubmit(event) {
+    event.preventDefault(); 
+    let nameElem = document.getElementById('name');
+    let emailElem = document.getElementById('email');
+    let phoneElem = document.getElementById('phone');
+    let webElem = document.getElementById('website');
+    let reqElem = document.getElementById('requirements');
+
+    let resName = document.getElementById('resName');
+    let resUrl = document.getElementById('resUrl');
+
+    if (resName) resName.innerText = nameElem ? nameElem.value || "Valued User" : "Valued User";
+    if (resUrl) resUrl.innerText = webElem ? webElem.value || "https://..." : "https://...";
+    
+    let clientData = {
+        name: nameElem ? nameElem.value : "",
+        email: emailElem ? emailElem.value : "",
+        phone: phoneElem ? phoneElem.value : "",
+        website: webElem ? webElem.value : "",
+        requirements: reqElem ? reqElem.value : ""
+    };
+
+    fetch('/send-report', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Email report response:", data);
+    })
+    .catch(error => {
+        console.error("Error sending email report:", error);
+    });
+
+    let modalEl = document.getElementById('scanResultModal');
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        new bootstrap.Modal(modalEl).show();
+    }
+}
+
+function paySelectedProblems() {
+    let totalInr = 0;
+    let selectedList = [];
+    document.querySelectorAll('.problem-chk:checked').forEach(chk => {
+        totalInr += parseInt(chk.getAttribute('data-price')) || 0;
+        selectedList.push(chk.getAttribute('data-name'));
+    });
+    
+    if(totalInr === 0) { alert("कृपया कम से कम एक समस्या (Problem) चुनें!"); return; }
+    
+    let nameElem = document.getElementById('name');
+    let emailElem = document.getElementById('email');
+    let phoneElem = document.getElementById('phone');
+
+    var options = {
+        "key": "rzp_live_TUiu15xHh1ZWpr",
+        "amount": totalInr * 100, 
+        "currency": "INR",
+        "name": "Insightify Tech Innovations",
+        "description": "Selected AI Website Audit Solutions (" + selectedList.length + " items)",
+        "handler": function (response){
+            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        },
+        "prefill": {
+            "name": nameElem ? nameElem.value : "Valued Client",
+            "email": emailElem ? emailElem.value : "insightifytechinnovations@gmail.com",
+            "contact": phoneElem ? phoneElem.value : "8077644565"
+        },
+        "theme": { "color": "#38bdf8" }
+    };
+    new Razorpay(options).open();
+}
+
+function payWithRazorpay() {
+    let payAmountElem = document.getElementById('payAmount');
+    let amountVal = payAmountElem ? payAmountElem.value || 999 : 999;
+    
+    let nameElem = document.getElementById('name');
+    let emailElem = document.getElementById('email');
+    let phoneElem = document.getElementById('phone');
+
+    var options = {
+        "key": "rzp_live_TUiu15xHh1ZWpr",
+        "amount": amountVal * 100, 
+        "currency": "INR",
+        "name": "Insightify Tech Innovations",
+        "description": "SEO & AI Services Consultation Fee",
+        "handler": function (response){
+            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        },
+        "prefill": {
+            "name": nameElem ? nameElem.value : "Valued Client",
+            "email": emailElem ? emailElem.value : "insightifytechinnovations@gmail.com",
+            "contact": phoneElem ? phoneElem.value : "8077644565"
+        },
+        "theme": { "color": "#38bdf8" }
+    };
+    new Razorpay(options).open();
+}
 </script>
+<script src="script.js"></script>
 </body>
 </html>

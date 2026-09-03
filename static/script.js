@@ -19,7 +19,7 @@ if (userInput) {
         if (expandBtn) expandBtn.innerHTML = `<i class="bi bi-arrows-angle-contract"></i> छोटा करें`;
     });
 
-    // Enter बटन दबाने पर भी मैसेज सेंड होने के लिए फीचर जोड़ा गया है
+    // Enter बटन दबाने पर भी मैसेज सेंड होने के लिए फीचर जोड़ा गया है
     userInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             sendMessage();
@@ -69,13 +69,42 @@ function calculateTotal() {
 function handleScanSubmit(event) {
     event.preventDefault(); 
     let nameElem = document.getElementById('name');
+    let emailElem = document.getElementById('email');
+    let phoneElem = document.getElementById('phone');
     let webElem = document.getElementById('website');
+    let reqElem = document.getElementById('requirements');
+
     let resName = document.getElementById('resName');
     let resUrl = document.getElementById('resUrl');
 
     if (resName) resName.innerText = nameElem ? nameElem.value || "Valued User" : "Valued User";
     if (resUrl) resUrl.innerText = webElem ? webElem.value || "https://..." : "https://...";
     
+    // नया फीचर: फॉर्म सबमिट होते ही बैकएंड को डेटा भेजना ताकि क्लाइंट की मेल पर रिपोर्ट और पेमेंट लिंक जा सके
+    let clientData = {
+        name: nameElem ? nameElem.value : "",
+        email: emailElem ? emailElem.value : "",
+        phone: phoneElem ? phoneElem.value : "",
+        website: webElem ? webElem.value : "",
+        requirements: reqElem ? reqElem.value : ""
+    };
+
+    fetch('/send-report', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Email report response:", data);
+    })
+    .catch(error => {
+        console.error("Error sending email report:", error);
+    });
+
+    // पुराना मॉडल पॉपअप जो डेस्कटॉप पर तुरंत समस्याएं दिखाता है
     let modalEl = document.getElementById('scanResultModal');
     if (modalEl && typeof bootstrap !== 'undefined') {
         new bootstrap.Modal(modalEl).show();
@@ -141,3 +170,19 @@ function payWithRazorpay() {
     };
     new Razorpay(options).open();
 }
+
+// नया जोड़ा गया कोड: हीरो बैनर की लोकल इमेजेस (img1.png से img5.png) को ऑटोमैटिक स्लाइड करने के लिए
+let currentIndex = 1;
+const totalImages = 5; 
+
+function changeBannerImage() {
+    currentIndex = currentIndex > totalImages ? 1 : currentIndex;
+    const bannerImg = document.getElementById('dynamic-banner');
+    if (bannerImg) {
+        bannerImg.src = `/static/images/img${currentIndex}.png`;
+    }
+    currentIndex++;
+}
+
+// हर 3 सेकंड में बैनर की इमेज अपने आप बदलती रहेगी
+setInterval(changeBannerImage, 3000);
