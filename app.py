@@ -33,7 +33,7 @@ def send_completion_email(client_email, work_details):
     
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('insightifytechinnovations@gmail.com', "vkawsiacgsngxgun")
+            smtp.login('insightifytechinnovations@gmail.com', "mbvq oslp tgel atnf")
             smtp.send_message(msg)
     except Exception as e:
         print(f"Email error: {e}")
@@ -145,7 +145,7 @@ def send_report():
         msg.add_alternative(html_content, subtype='html')
         
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('insightifytechinnovations@gmail.com', "vkawsiacgsngxgun")
+            smtp.login('insightifytechinnovations@gmail.com', "mbvq oslp tgel atnf")
             smtp.send_message(msg)
             
         print(f"Report successfully sent to client: {client_email}")
@@ -452,7 +452,7 @@ def send_daily_evening_report():
     
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('insightifytechinnovations@gmail.com', "vkawsiacgsngxgun")
+            smtp.login('insightifytechinnovations@gmail.com', "mbvq oslp tgel atnf")
             smtp.send_message(msg)
         print("Daily evening report sent successfully to your email!")
     except Exception as e:
