@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your SEO Audit Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white p-5">
+    <div class="container glass-card">
+        <h2>Your Website Audit Report</h2>
+        <p>नीचे दी गई समस्याओं को सेलेक्ट करें और अपना पेमेंट पूरा करें:</p>
+        
+        <form id="audit-form">
+            <div class="form-check mb-2">
+                <!-- script.js के साथ मैच करने के लिए problem-chk, data-price और data-name जोड़ा गया है -->
+                <input class="form-check-input problem-chk" type="checkbox" value="500" data-price="500" data-name="Fix Broken Links" id="issue1" onchange="calculateTotal()">
+                <label class="form-check-label" for="issue1">Fix Broken Links - ₹500</label>
+            </div>
+            <div class="form-check mb-2">
+                <input class="form-check-input problem-chk" type="checkbox" value="1000" data-price="1000" data-name="Meta Tag Optimization" id="issue2" onchange="calculateTotal()">
+                <label class="form-check-label" for="issue2">Meta Tag Optimization - ₹1000</label>
+            </div>
+            
+            <hr>
+            <!-- ID को 'totalAmountText' किया गया है ताकि external script.js इसे आसानी से ढूंढ सके -->
+            <h4>Total (Including 18% GST): ₹<span id="totalAmountText">0</span></h4>
+            <button type="button" class="btn btn-success" onclick="proceedToPayment()">Pay & Fix Now</button>
+        </form>
+    </div>
+
+    <script>
+        // आपका ऑरिजिनल कैलकुलेशन और पेमेंट फंक्शन सुरक्षित रखा गया है
+        function calculateTotal() {
+            let total = 0;
+            if(document.getElementById('issue1').checked) total += 500;
+            if(document.getElementById('issue2').checked) total += 1000;
+            
+            let finalAmount = total + (total * 0.18); // GST Addition
+            
+            // दोनों IDs पर वैल्यू अपडेट होगी ताकि कोई कन्फ्यूजन न हो
+            let totalElem1 = document.getElementById('total-amount');
+            let totalElem2 = document.getElementById('totalAmountText');
+            
+            if(totalElem1) totalElem1.innerText = finalAmount;
+            if(totalElem2) totalElem2.innerText = finalAmount;
+        }
+
+        function proceedToPayment() {
+            let total = 0;
+            let selectedList = [];
+            
+            if(document.getElementById('issue1').checked) {
+                total += 500;
+                selectedList.push("Fix Broken Links");
+            }
+            if(document.getElementById('issue2').checked) {
+                total += 1000;
+                selectedList.push("Meta Tag Optimization");
+            }
+
+            if (total === 0) {
+                alert("Please select at least one issue.");
+                return;
+            }
+
+            let finalAmount = total + (total * 0.18);
+
+            // Razorpay डायरेक्ट पेमेंट इंटीग्रेशन जोड़ा गया है (बिना पुरानी कोडिंग हटाए)
+            var options = {
+                "key": "rzp_live_TUiu15xHh1ZWpr",
+                "amount": finalAmount * 100, 
+                "currency": "INR",
+                "name": "Insightify Tech Innovations",
+                "description": "Selected AI Website Audit Solutions (" + selectedList.length + " items)",
+                "handler": function (response){
+                    alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                    
+                    // पेमेंट सफल होते ही बैकएंड पर डेटा सेव और रिपोर्ट भेजने का अनुरोध
+                    fetch('/process-autofix', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            payment_id: response.razorpay_payment_id,
+                            name: "Client",
+                            email: "insightifytechinnovations@gmail.com",
+                            phone: "8077644565",
+                            website: "https://insightifyinnovations.com",
+                            selected_problems: selectedList,
+                            total: finalAmount
+                        })
+                      })
+                      .then(res => res.json())
+                      .then(data => console.log("Auto-fix report sent successfully:", data))
+                      .catch(err => console.error("Error:", err));
+                },
+                "prefill": {
+                    "name": "Client",
+                    "email": "insightifytechinnovations@gmail.com",
+                    "contact": "8077644565"
+              },
+              "theme": { "color": "#38bdf8" }
+            };
+            new Razorpay(options).open();
+        }
+    </script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
