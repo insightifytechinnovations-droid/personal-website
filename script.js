@@ -103,7 +103,7 @@ function handleScanSubmit(event) {
         console.error("Error sending email report:", error);
     });
 
-    // पॉपअप दिखाने के साथ ही फ्रंट पेज के फॉर्म इनपुट्स को तुरंत साफ़ (clear) करने के लिए कोड
+    // पॉपअप दिखाने के साथ ही फ्रंट पेज के फॉर्म इनपुट्स को तुरंत साफ़ (clear) करने के लिए कोड
     let formEl = document.querySelector('form'); // या अपने लीड फॉर्म की आईडी यहाँ दें
     if (formEl) {
         formEl.reset();
@@ -120,7 +120,7 @@ function paySelectedProblems() {
     let selectedList = [];
     document.querySelectorAll('.problem-chk:checked').forEach(chk => {
         totalInr += parseInt(chk.getAttribute('data-price')) || 0;
-        selectedList.push(chk.getAttribute('data-name'));
+        selectedList.push(chk.getAttribute('data-name') || chk.value);
     });
     
     if(totalInr === 0) { alert("कृपया कम से कम एक समस्या (Problem) चुनें!"); return; }
@@ -128,6 +128,7 @@ function paySelectedProblems() {
     let nameElem = document.getElementById('name');
     let emailElem = document.getElementById('email');
     let phoneElem = document.getElementById('phone');
+    let webElem = document.getElementById('website');
 
     var options = {
         "key": "rzp_live_TUiu15xHh1ZWpr",
@@ -137,6 +138,26 @@ function paySelectedProblems() {
         "description": "Selected AI Website Audit Solutions (" + selectedList.length + " items)",
         "handler": function (response){
             alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+            
+            // --- पेमेंट सफल होते ही बैकएंड पर डेटा सेव और ऑटो-फिक्स रिपोर्ट ट्रिगर करने का कोड ---
+            fetch('/process-autofix', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    payment_id: response.razorpay_payment_id,
+                    name: nameElem ? nameElem.value : "Valued Client",
+                    email: emailElem ? emailElem.value : "insightifytechinnovations@gmail.com",
+                    phone: phoneElem ? phoneElem.value : "8077644565",
+                    website: webElem ? webElem.value : "https://insightifyinnovations.com",
+                    selected_problems: selectedList,
+                    total: totalInr
+                })
+            })
+            .then(res => res.json())
+            .then(resData => {
+                console.log("Auto-fix and email report dispatched:", resData);
+            })
+            .catch(err => console.error("Auto-fix error:", err));
         },
         "prefill": {
             "name": nameElem ? nameElem.value : "Valued Client",
@@ -155,6 +176,7 @@ function payWithRazorpay() {
     let nameElem = document.getElementById('name');
     let emailElem = document.getElementById('email');
     let phoneElem = document.getElementById('phone');
+    let webElem = document.getElementById('website');
 
     var options = {
         "key": "rzp_live_TUiu15xHh1ZWpr",
@@ -164,6 +186,23 @@ function payWithRazorpay() {
         "description": "SEO & AI Services Consultation Fee",
         "handler": function (response){
             alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+            
+            fetch('/process-autofix', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    payment_id: response.razorpay_payment_id,
+                    name: nameElem ? nameElem.value : "Valued Client",
+                    email: emailElem ? emailElem.value : "insightifytechinnovations@gmail.com",
+                    phone: phoneElem ? phoneElem.value : "8077644565",
+                    website: webElem ? webElem.value : "https://insightifyinnovations.com",
+                    selected_problems: ["Standard SEO Consultation & General Fixes"],
+                    total: amountVal
+                })
+            })
+            .then(res => res.json())
+            .then(resData => console.log("Consultation report sent:", resData))
+            .catch(err => console.error("Error:", err));
         },
         "prefill": {
             "name": nameElem ? nameElem.value : "Valued Client",
