@@ -610,7 +610,7 @@
         <p><i class="bi bi-geo-alt-fill text-info"></i> <strong>Head Office:</strong> Hathras, UP | <i class="bi bi-receipt text-info"></i> <strong>GSTIN:</strong> 09AACHI6384B1ZG</p>
         <p><i class="bi bi-telephone-fill text-info"></i> <strong>Helpline:</strong> +91 8077644565 | <i class="bi bi-envelope-fill text-info"></i> <strong>Email:</strong> insightifytechinnovations@gmail.com</p>
         <div class="footer-copyright">
-            © 2026 Insightify Tech Innovations Pvt. Ltd. | All Rights Reserved | ISO Certified
+            © 2024 Insightify Tech Innovations Pvt. Ltd. | All Rights Reserved | ISO Certified
         </div>
     </div>
 </footer>
@@ -827,5 +827,14 @@ function payWithRazorpay() {
 }
 </script>
 <script src="script.js"></script>
+<!-- Direct UPI & QR Code Payment Section -->
+<div style="text-align: center; margin-top: 30px; padding: 20px; background: #f9f9f9; border-radius: 10px; border: 1px solid #ddd;">
+    <h3>Or Pay Directly via UPI / QR Code</h3>
+    <p>Scan the QR code using PhonePe, Google Pay, or Paytm:</p>
+    <img src="{{ url_for('static', filename='qrcode.jpeg') }}" alt="UPI QR Code" style="width: 200px; height: auto; border-radius: 8px; border: 1px solid #ccc; margin: 10px 0;">
+    <br>
+    <p style="font-size: 16px; font-weight: bold; color: #333; margin: 10px 0;">PhonePe / UPI Number: <span style="color: #007bff;">9319825907</span></p>
+    <a href="upi://pay?pa=9319825907@ybl&pn=InsightifyTech&am=399&cu=INR" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 5px;">Pay ₹399 via UPI App</a>
+</div>
 </body>
 </html>
