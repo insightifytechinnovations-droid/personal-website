@@ -18,6 +18,13 @@ if (userInput) {
         let expandBtn = document.getElementById('expandBtn');
         if (expandBtn) expandBtn.innerHTML = `<i class="bi bi-arrows-angle-contract"></i> छोटा करें`;
     });
+
+    // Enter बटन दबाने पर भी मैसेज सेंड होने के लिए फीचर जोड़ा गया है
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
 }
 
 function sendMessage() {
@@ -62,13 +69,46 @@ function calculateTotal() {
 function handleScanSubmit(event) {
     event.preventDefault(); 
     let nameElem = document.getElementById('name');
+    let emailElem = document.getElementById('email');
+    let phoneElem = document.getElementById('phone');
     let webElem = document.getElementById('website');
+    let reqElem = document.getElementById('requirements');
+
     let resName = document.getElementById('resName');
     let resUrl = document.getElementById('resUrl');
 
     if (resName) resName.innerText = nameElem ? nameElem.value || "Valued User" : "Valued User";
     if (resUrl) resUrl.innerText = webElem ? webElem.value || "https://..." : "https://...";
     
+    let clientData = {
+        name: nameElem ? nameElem.value : "",
+        email: emailElem ? emailElem.value : "",
+        phone: phoneElem ? phoneElem.value : "",
+        website: webElem ? webElem.value : "",
+        requirements: reqElem ? reqElem.value : ""
+    };
+
+    fetch('/send-report', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Email report response:", data);
+    })
+    .catch(error => {
+        console.error("Error sending email report:", error);
+    });
+
+    // पॉपअप दिखाने के साथ ही फ्रंट पेज के फॉर्म इनपुट्स को तुरंत साफ़ (clear) करने के लिए कोड
+    let formEl = document.querySelector('form'); // या अपने लीड फॉर्म की आईडी यहाँ दें
+    if (formEl) {
+        formEl.reset();
+    }
+
     let modalEl = document.getElementById('scanResultModal');
     if (modalEl && typeof bootstrap !== 'undefined') {
         new bootstrap.Modal(modalEl).show();
@@ -134,3 +174,17 @@ function payWithRazorpay() {
     };
     new Razorpay(options).open();
 }
+
+let currentIndex = 1;
+const totalImages = 5; 
+
+function changeBannerImage() {
+    currentIndex = currentIndex > totalImages ? 1 : currentIndex;
+    const bannerImg = document.getElementById('dynamic-banner');
+    if (bannerImg) {
+        bannerImg.src = `/static/images/img${currentIndex}.png`;
+    }
+    currentIndex++;
+}
+
+setInterval(changeBannerImage, 3000);
