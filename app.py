@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, Response
+from flask import Flask, render_template, request, jsonify, Response, send_from_directory
 import smtplib
 from email.message import EmailMessage
 from chatbot_engine import insightify_ai_bot
@@ -21,6 +21,11 @@ app = Flask(__name__)
 
 # GST Constant (18%)
 GST_RATE = 0.18
+
+# --- Google Search Console HTML File Verification Route ---
+@app.route('/googled4271a278b56e5dc.html')
+def google_verify():
+    return send_from_directory('.', 'googled4271a278b56e5dc.html')
 
 # Email Automation Function (Gmail SMTP Backup)
 def send_completion_email(client_email, work_details):
