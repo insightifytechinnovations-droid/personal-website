@@ -32,7 +32,7 @@ def send_completion_email(client_email, work_details):
     msg.set_content(f"Dear Client,\n\nYour selected website issues have been successfully auto-fixed by Insightify Tech AI System.\n\nWork & Problem Details:\n{work_details}\n\n100% Secure & Verified Proof Report Attached/Processed.\n\nThank you for choosing Insightify Tech Innovations Private Limited.\n\nSupport Helpline: +91 8077644565\nGSTIN: 09AACHI6384B1ZG")
     
     try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=10) as smtp:
             smtp.login('insightifytechinnovations@gmail.com', "mbvq oslp tgel atnf")
             smtp.send_message(msg)
     except Exception as e:
@@ -144,7 +144,7 @@ def send_report():
         msg.set_content("Please view this email in an HTML-supported client.")
         msg.add_alternative(html_content, subtype='html')
         
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=10) as smtp:
             smtp.login('insightifytechinnovations@gmail.com', "mbvq oslp tgel atnf")
             smtp.send_message(msg)
             
@@ -365,7 +365,7 @@ def post_to_facebook_instagram(ad_message):
         'access_token': page_access_token
     }
     try:
-        response = requests.post(url, data=payload)
+        response = requests.post(url, data=payload, timeout=10)
         if response.status_code == 200:
             print("Successfully posted to Facebook & Instagram!")
         else:
@@ -384,7 +384,7 @@ def post_to_twitter(ad_message):
         "text": ad_message[:280] + "\n\n🔗 https://insightifyinnovations.com"
     }
     try:
-        response = requests.post(url, json=payload, headers=headers)
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
         if response.status_code == 201:
             print("Successfully posted to X (Twitter)!")
         else:
@@ -448,10 +448,10 @@ def send_daily_evening_report():
     msg['Subject'] = report_subject
     msg['From'] = 'insightifytechinnovations@gmail.com'
     msg['To'] = 'insightifytechinnovations@gmail.com'
-    msg['Set_content'](report_content)
+    msg.set_content(report_content)
     
     try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=10) as smtp:
             smtp.login('insightifytechinnovations@gmail.com', "mbvq oslp tgel atnf")
             smtp.send_message(msg)
         print("Daily evening report sent successfully to your email!")
