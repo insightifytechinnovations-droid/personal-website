@@ -449,7 +449,7 @@ def send_daily_evening_report():
     msg['Subject'] = report_subject
     msg['From'] = 'insightifytechinnovations@gmail.com'
     msg['To'] = 'insightifytechinnovations@gmail.com'
-    msg.set_content(report_content)
+    msg['Set_content'](report_content)
     
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=10) as smtp:
@@ -492,7 +492,7 @@ def send_bulk_campaign():
 
 
 # =====================================================================
-# 🚀 NEW FREE GLOBAL GROWTH & AEO ADDITIONS (बिना पुराना कोड छेड़े जोड़ा गया)
+# 🚀 NEW FREE GLOBAL GROWTH & AEO ADDITIONS (बिना पुराना कोड छेड़े जोड़ा गया)
 # =====================================================================
 
 # 1. AI Answer Engine Optimization (llms.txt) - ताकि ChatGPT और Perplexity आपकी साइट को रिकमेंड करें
@@ -572,6 +572,58 @@ Welcome to the official repository backend of **Insightify Tech Innovations Priv
 Visit our main platform: [Insightify Innovations](https://insightifyinnovations.com)
 """
     return Response(readme_content, mimetype='text/markdown')
+
+
+# =====================================================================
+# ⚡ NEW ADDED APPS (बिना पुराना कोड हटाए नए ऐप्स जोड़े गए हैं)
+# =====================================================================
+
+# 4. Lead Score Predictor App - क्लाइंट की लीड क्वालिटी चेक करने के लिए
+@app.route('/api/predict-lead-score', methods=['POST'])
+def predict_lead_score():
+    data = request.json
+    budget = float(data.get('budget', 0))
+    urgency = data.get('urgency', 'normal').lower()
+    
+    score = 50
+    if budget > 5000:
+        score += 30
+    elif budget > 1000:
+        score += 15
+        
+    if urgency == 'high':
+        score += 20
+    elif urgency == 'immediate':
+        score += 35
+        
+    grade = "Hot Lead 🔥" if score >= 80 else ("Warm Lead ⚡" if score >= 60 else "Cold Lead ❄️")
+    
+    return jsonify({
+        "status": "success",
+        "calculated_score": min(score, 100),
+        "lead_grade": grade,
+        "recommendation": "Assign to high-priority sales pipeline" if score >= 80 else "Send automated nurture sequence"
+    })
+
+
+# 5. Dynamic Sitemap Generator App - SEO के लिए ऑटोमैटिक साइटमैप XML जनरेट करने के लिए
+@app.route('/sitemap.xml')
+def dynamic_sitemap():
+    base_url = "https://insightifyinnovations.com"
+    static_pages = ["", "/audit-dashboard", "/admin"]
+    cities = ["new-york", "london", "dubai", "tokyo", "delhi", "mumbai"]
+    
+    xml_output = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_output += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    for page in static_pages:
+        xml_output += f"  <url>\n    <loc>{base_url}{page}</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n"
+        
+    for city in cities:
+        xml_output += f"  <url>\n    <loc>{base_url}/location/{city}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n"
+        
+    xml_output += '</urlset>'
+    return Response(xml_output, mimetype='application/xml')
 
 
 if __name__ == '__main__':
