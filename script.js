@@ -103,8 +103,8 @@ function handleScanSubmit(event) {
         console.error("Error sending email report:", error);
     });
 
-    // पॉपअप दिखाने के साथ ही फ्रंट पेज के फॉर्म इनपुट्स को तुरंत साफ़ (clear) करने के लिए कोड
-    let formEl = document.querySelector('form'); // या अपने लीड फॉर्म की आईडी यहाँ दें
+    // पॉपअप दिखाने के साथ ही फ्रंट पेज के फॉर्म इनपुट्स को तुरंत साफ (clear) करने के लिए कोड
+    let formEl = document.querySelector('form'); 
     if (formEl) {
         formEl.reset();
     }
@@ -131,7 +131,7 @@ function paySelectedProblems() {
     let webElem = document.getElementById('website');
 
     var options = {
-        "key": "rzp_live_TUiu15xHh1ZWpr",
+        "key": "rzp_live_TZ7ozB0Nc127RK",
         "amount": totalInr * 100, 
         "currency": "INR",
         "name": "Insightify Tech Innovations",
@@ -139,7 +139,7 @@ function paySelectedProblems() {
         "handler": function (response){
             alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
             
-            // --- पेमेंट सफल होते ही बैकएंड पर डेटा सेव और ऑटो-फिक्स रिपोर्ट ट्रिगर करने का कोड ---
+            // --- पेमेंट सफल होते ही बैकएंड पर डेटा सेव, ऑटो-फिक्स रिपोर्ट और Brevo ईमेल ट्रिगर करने का कोड ---
             fetch('/process-autofix', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -155,7 +155,10 @@ function paySelectedProblems() {
             })
             .then(res => res.json())
             .then(resData => {
-                console.log("Auto-fix and email report dispatched:", resData);
+                console.log("Auto-fix, email report and Brevo dispatch successful:", resData);
+                // पेमेंट और ईमेल ट्रिगर होने के बाद फॉर्म को पूरी तरह साफ़ करने के लिए
+                let formEl = document.querySelector('form');
+                if (formEl) formEl.reset();
             })
             .catch(err => console.error("Auto-fix error:", err));
         },
@@ -179,7 +182,7 @@ function payWithRazorpay() {
     let webElem = document.getElementById('website');
 
     var options = {
-        "key": "rzp_live_TUiu15xHh1ZWpr",
+        "key": "rzp_live_TZ7ozB0Nc127RK",
         "amount": amountVal * 100, 
         "currency": "INR",
         "name": "Insightify Tech Innovations",
@@ -201,7 +204,11 @@ function payWithRazorpay() {
                 })
             })
             .then(res => res.json())
-            .then(resData => console.log("Consultation report sent:", resData))
+            .then(resData => {
+                console.log("Consultation report and email sent:", resData);
+                let formEl = document.querySelector('form');
+                if (formEl) formEl.reset();
+            })
             .catch(err => console.error("Error:", err));
         },
         "prefill": {
