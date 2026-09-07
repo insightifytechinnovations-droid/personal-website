@@ -611,12 +611,13 @@ def predict_lead_score():
     })
 
 
-# 5. Dynamic Sitemap Generator App - SEO के लिए ऑटोमैटिक साइटमैप XML जनरेट करने के लिए
+import pycountry
+
+# 5. Dynamic Sitemap Generator App - दुनिया के सभी देशों के लिए ऑटोमैटिक सिटमैप
 @app.route('/sitemap.xml')
 def dynamic_sitemap():
     base_url = "https://insightifyinnovations.com"
     static_pages = ["", "/audit-dashboard", "/admin"]
-    cities = ["new-york", "london", "dubai", "tokyo", "delhi", "mumbai"]
     
     xml_output = '<?xml version="1.0" encoding="UTF-8"?>\n'
     xml_output += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -624,13 +625,55 @@ def dynamic_sitemap():
     for page in static_pages:
         xml_output += f"  <url>\n    <loc>{base_url}{page}</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n"
         
-    for city in cities:
-        xml_output += f"  <url>\n    <loc>{base_url}/location/{city}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n"
+    # दुनिया के सभी देशों के नाम (pycountry से फेच करके यूआरएल फ्रेंडली बनाए गए हैं)
+    for country in pycountry.countries:
+        country_slug = country.name.lower().replace(' ', '-').replace(',', '').replace("'", "")
+        xml_output += f"  <url>\n    <loc>{base_url}/country/{country_slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n"
         
     xml_output += '</urlset>'
     return Response(xml_output, mimetype='application/xml')
 
 
+# Programmatic SEO - सभी देशों के लिए ग्लोबल डायनामिक लैंडिंग पेज
+@app.route('/country/<country_name>')
+def programmatic_seo_country(country_name):
+    formatted_country = country_name.replace('-', ' ').title()
+    
+    page_html = f"""
+    <html>
+    <head>
+        <title>Best AI Website Error Fixer & SEO Audit in {formatted_country} - Insightify Tech</title>
+        <meta name="description" content="Looking for automated website fixing and global SEO services in {formatted_country}? Insightify Tech Innovations provides instant AI-powered website fixes and audits.">
+    </head>
+    <body style="background: #0f172a; color: #fff; font-family: Arial, sans-serif; padding: 40px; text-align: center;">
+        <div style="max-width: 700px; margin: auto; background: #1e293b; padding: 40px; border-radius: 15px; border: 2px solid #38bdf8;">
+            <h1 style="color: #38bdf8;">AI Website Audit & Auto-Fix Services in {formatted_country}</h1>
+            <p style="font-size: 18px; color: #cbd5e1;">Empowering businesses in <b>{formatted_country}</b> and worldwide with instant technical SEO patches, security fixes, and automated AI tools.</p>
+            
+            <div style="margin: 30px 0; background: #0f172a; padding: 20px; border-radius: 10px; text-align: left;">
+                <h3>Why Businesses in {formatted_country} Choose Us:</h3>
+                <ul style="line-height: 2; color: #94a3b8;">
+                    <li>⚡ Instant Automated Website Scanning & Bug Fixing</li>
+                    <li>🌍 Global CDN & Multi-Region Performance Indexing</li>
+                    <li>🔒 100% Secure SSL & Enterprise Protection</li>
+                </ul>
+            </div>
+            
+            <a href="https://insightifyinnovations.com/audit-dashboard" style="background: #22c55e; color: #fff; padding: 15px 30px; text-decoration: none; font-size: 18px; font-weight: bold; border-radius: 8px; display: inline-block;">
+                🚀 Scan Your Website Free Now
+            </a>
+            
+            <p style="margin-top: 40px; font-size: 12px; color: #64748b;">
+                Insightify Tech Innovations Private Limited | Hathras, UP, India<br>
+                Helpline: +91 8077644565 | GSTIN: 09AACHI6384B1ZG
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+    return page_html
+
+
 if __name__ == '__main__':
-    print("Insightify AI Server starting with Full Omnichannel Automation & Free Global Growth Modules...")
+    print("Insightify AI Server starting with All-Countries Global Growth Modules...")
     app.run(debug=True, port=5000)
