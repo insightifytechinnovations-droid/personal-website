@@ -234,3 +234,40 @@ function changeBannerImage() {
 }
 
 setInterval(changeBannerImage, 3000);
+
+// --- बिना पेमेंट फ्री ऑडिट रिपोर्ट भेजने वाला नया फंक्शन (बिना पुरानी कोडिंग हटाए जोड़ा गया है) ---
+function sendDirectFreeReport() {
+    let nameElem = document.getElementById('name');
+    let emailElem = document.getElementById('email');
+    let phoneElem = document.getElementById('phone');
+    let webElem = document.getElementById('website');
+    let reqElem = document.getElementById('requirements');
+
+    if(!emailElem || !emailElem.value.trim()) {
+        alert("कृपया कम से कम ईमेल (Email) और अन्य विवरण भरें!");
+        return;
+    }
+
+    let clientData = {
+        name: nameElem ? nameElem.value : "Valued Client",
+        email: emailElem.value,
+        phone: phoneElem ? phoneElem.value : "",
+        website: webElem ? webElem.value : "",
+        requirements: reqElem ? reqElem.value : "Direct Free Report Request"
+    };
+
+    fetch('/send-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(clientData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("फ्री ऑडिट रिपोर्ट आपके और क्लाइंट के ईमेल पर भेजी जा रही है!");
+        console.log("Direct report response:", data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("रिपोर्ट भेजने में त्रुटि हुई।");
+    });
+}
