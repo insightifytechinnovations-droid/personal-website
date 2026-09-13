@@ -8,11 +8,19 @@
 <body class="bg-dark text-white p-5">
     <div class="container glass-card">
         <h2>Your Website Audit Report</h2>
-        <p>नीचे दी गई समस्याओं को सेलेक्ट करें और अपना पेमेंट पूरा करें:</p>
+        <p>अपनी क्लाइंट डिटेल्स भरें, समस्याएं सेलेक्ट करें और पेमेंट पूरा करें:</p>
         
+        <!-- क्लाइंट डीटेल्स फॉर्म इनपुट्स जोड़े गए हैं ताकि ईमेल/रिपोर्ट में सही डेटा जाए -->
+        <div class="mb-4 p-3 bg-secondary rounded">
+            <h5>Client Information</h5>
+            <input type="text" id="name" class="form-control mb-2" placeholder="Full Name" value="Client">
+            <input type="email" id="email" class="form-control mb-2" placeholder="Email Address" value="insightifytechinnovations@gmail.com">
+            <input type="text" id="phone" class="form-control mb-2" placeholder="Phone Number" value="8077644565">
+            <input type="text" id="website" class="form-control" placeholder="Website URL" value="https://insightifyinnovations.com">
+        </div>
+
         <form id="audit-form">
             <div class="form-check mb-2">
-                <!-- script.js के साथ मैच करने के लिए problem-chk, data-price और data-name जोड़ा गया है -->
                 <input class="form-check-input problem-chk" type="checkbox" value="500" data-price="500" data-name="Fix Broken Links" id="issue1" onchange="calculateTotal()">
                 <label class="form-check-label" for="issue1">Fix Broken Links - ₹500</label>
             </div>
@@ -22,22 +30,24 @@
             </div>
             
             <hr>
-            <!-- ID को 'totalAmountText' किया गया है ताकि external script.js इसे आसानी से ढूंढ सके -->
             <h4>Total (Including 18% GST): ₹<span id="totalAmountText">0</span></h4>
-            <button type="button" class="btn btn-success" onclick="proceedToPayment()">Pay & Fix Now</button>
+            <div id="total-amount" class="d-none">0</div>
+            
+            <div class="mt-3">
+                <button type="button" class="btn btn-success me-2" onclick="proceedToPayment()">Pay Now (Instant AI Fix)</button>
+                <button type="button" class="btn btn-warning" onclick="proceedPayLater()">Pay Later (Manual Review)</button>
+            </div>
         </form>
     </div>
 
     <script>
-        // आपका ऑरिजिनल कैलकुलेशन और पेमेंट फंक्शन सुरक्षित रखा गया है
         function calculateTotal() {
             let total = 0;
             if(document.getElementById('issue1').checked) total += 500;
             if(document.getElementById('issue2').checked) total += 1000;
             
-            let finalAmount = total + (total * 0.18); // GST Addition
+            let finalAmount = total + (total * 0.18);
             
-            // दोनों IDs पर वैल्यू अपडेट होगी ताकि कोई कन्फ्यूजन न हो
             let totalElem1 = document.getElementById('total-amount');
             let totalElem2 = document.getElementById('totalAmountText');
             
@@ -64,8 +74,11 @@
             }
 
             let finalAmount = total + (total * 0.18);
+            let nameVal = document.getElementById('name') ? document.getElementById('name').value : "Client";
+            let emailVal = document.getElementById('email') ? document.getElementById('email').value : "insightifytechinnovations@gmail.com";
+            let phoneVal = document.getElementById('phone') ? document.getElementById('phone').value : "8077644565";
+            let webVal = document.getElementById('website') ? document.getElementById('website').value : "https://insightifyinnovations.com";
 
-            // Razorpay डायरेक्ट पेमेंट इंटीग्रेशन जोड़ा गया है (बिना पुरानी कोडिंग हटाए)
             var options = {
                 "key": "rzp_live_TUiu15xHh1ZWpr",
                 "amount": finalAmount * 100, 
@@ -75,32 +88,67 @@
                 "handler": function (response){
                     alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
                     
-                    // पेमेंट सफल होते ही बैकएंड पर डेटा सेव और रिपोर्ट भेजने का अनुरोध
                     fetch('/process-autofix', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             payment_id: response.razorpay_payment_id,
-                            name: "Client",
-                            email: "insightifytechinnovations@gmail.com",
-                            phone: "8077644565",
-                            website: "https://insightifyinnovations.com",
+                            name: nameVal,
+                            email: emailVal,
+                            phone: phoneVal,
+                            website: webVal,
                             selected_problems: selectedList,
                             total: finalAmount
                         })
-                      })
-                      .then(res => res.json())
-                      .then(data => console.log("Auto-fix report sent successfully:", data))
-                      .catch(err => console.error("Error:", err));
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log("Auto-fix report sent successfully:", data);
+                        let formEl = document.getElementById('audit-form');
+                        if(formEl) formEl.reset();
+                        calculateTotal();
+                    })
+                    .catch(err => console.error("Error:", err));
                 },
                 "prefill": {
-                    "name": "Client",
-                    "email": "insightifytechinnovations@gmail.com",
-                    "contact": "8077644565"
-              },
-              "theme": { "color": "#38bdf8" }
+                    "name": nameVal,
+                    "email": emailVal,
+                    "contact": phoneVal
+                },
+                "theme": { "color": "#38bdf8" }
             };
             new Razorpay(options).open();
+        }
+
+        function proceedPayLater() {
+            let selectedList = [];
+            if(document.getElementById('issue1').checked) selectedList.push("Fix Broken Links");
+            if(document.getElementById('issue2').checked) selectedList.push("Meta Tag Optimization");
+            
+            let nameVal = document.getElementById('name') ? document.getElementById('name').value : "Client";
+            let emailVal = document.getElementById('email') ? document.getElementById('email').value : "insightifytechinnovations@gmail.com";
+            let phoneVal = document.getElementById('phone') ? document.getElementById('phone').value : "8077644565";
+            let webVal = document.getElementById('website') ? document.getElementById('website').value : "https://insightifyinnovations.com";
+
+            fetch('/send-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: nameVal,
+                    email: emailVal,
+                    phone: phoneVal,
+                    website: webVal,
+                    requirements: "Pay Later Option Selected - Issues: " + selectedList.join(", ")
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert("Your Pay Later request has been recorded. Our team at Insightify Tech Innovations will contact you shortly!");
+                let formEl = document.getElementById('audit-form');
+                if(formEl) formEl.reset();
+                calculateTotal();
+            })
+            .catch(err => console.error("Error:", err));
         }
     </script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
